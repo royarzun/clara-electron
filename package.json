@@ -1,0 +1,33 @@
+{
+  "name": "clara-electron",
+  "version": "1.0.0",
+  "description": "Clara as a web/desktop app using electron from github.com",
+  "main": "clara/index.js",
+  "scripts": {
+    "start": "electron clara/index.js",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/royarzun/clara-electron.git"
+  },
+  "keywords": [
+    "clara",
+    "electron",
+    "probe",
+    "services",
+    "microservices",
+    "webapp",
+    "rest"
+  ],
+  "author": "Ricardo Oyarzun",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/royarzun/clara-electron/issues"
+  },
+  "homepage": "https://github.com/royarzun/clara-electron#readme",
+  "devDependencies": {
+    "electron": "^1.4.0",
+    "zmq": "^2.15.3"
+  }
+}
