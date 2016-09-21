@@ -2,9 +2,9 @@
   "name": "clara-electron",
   "version": "1.0.0",
   "description": "Clara as a web/desktop app using electron from github.com",
-  "main": "clara/index.js",
+  "main": "main.js",
   "scripts": {
-    "start": "electron clara/index.js",
+    "start": "electron .",
     "test": "test"
   },
   "repository": {
