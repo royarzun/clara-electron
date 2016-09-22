@@ -4,7 +4,7 @@
   "description": "Clara as a web/desktop app using electron from github.com",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "electron main.js",
     "test": "test"
   },
   "repository": {
@@ -28,6 +28,7 @@
   "homepage": "https://github.com/royarzun/clara-electron#readme",
   "devDependencies": {
     "electron": "^1.4.0",
+    "electron-rebuild": "^1.2.1",
     "zmq": "^2.15.3"
   }
 }
