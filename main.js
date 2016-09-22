@@ -8,7 +8,7 @@ app.on('ready', function() {
     height: 600,
     title: "Clara Probe - ClaRA Framework"
   })
-  mainWindow.loadURL('file://' + __dirname + '/clara/html/main.html')
+  mainWindow.loadURL('file://' + __dirname + '/main.html')
   subscriber = require('./clara/subscriber');
   // Closing procedure for probe app
   mainWindow.on('closed', function() {

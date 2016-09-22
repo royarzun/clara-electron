@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron main.js",
-    "test": "test"
+    "test": "mocha tests && npm run lint"
   },
   "repository": {
     "type": "git",
@@ -27,8 +27,10 @@
   },
   "homepage": "https://github.com/royarzun/clara-electron#readme",
   "devDependencies": {
+    "bootstrap": "^3.3.7",
     "electron": "^1.4.0",
     "electron-rebuild": "^1.2.1",
+    "mocha": "^3.0.2",
     "zmq": "^2.15.3"
   }
 }
