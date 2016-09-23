@@ -1,7 +1,5 @@
 var ipc = require('electron').ipcRenderer;
-const zmq = require('zmq'),
-    sock = zmq.socket('sub');
-
+var subscriber = require('./helpers/subscriber');
 let set = new Set();
 
 
@@ -9,29 +7,20 @@ window.onerror = function(error, url, line) {
     ipc.send('errorInWindow', error);
 };
 
-try {
-    var myip = require('quick-local-ip');
-    sock.connect('tcp://' + myip.getLocalIP4() + ':7772');
-    sock.subscribe('dpeAlive');
-    console.log('Subscriber connected to clara SUB port: 7772');
+var aliVeSubscription = new subscriber.Subscriber();
+aliVeSubscription.subscribe('dpeAlive', function(topic, metadata, data) {
+    var topic = data.toString('binary').split('?')[0];
+    if (!set.has(topic)) {
+        set.add(topic);
 
-    sock.on('message', function(topic, metadata, data) {
-        var topic = data.toString('binary').split("?")[0];
-        if (!set.has(topic)) {
-            set.add(topic);
+        var ul = document.getElementById('dpe-list'),
+            li = document.createElement('li'),
+            a = document.createElement('a');
 
-            var ul = document.getElementById('dpe-list'),
-                li = document.createElement("li"),
-                a = document.createElement("a");
-
-            a.appendChild(document.createTextNode(topic));
-            a.href = "#";
-            li.appendChild(a);
-            ul.appendChild(li);
-            console.log(new Date().toLocaleString() + ": DPE found", topic);
-        }
-    });
-
-} catch (err) {
-    console.log(err);
-}
+        a.appendChild(document.createTextNode(topic));
+        a.href = '#';
+        li.appendChild(a);
+        ul.appendChild(li);
+        console.log(new Date().toLocaleString() + ': DPE found', topic);
+    }
+});
