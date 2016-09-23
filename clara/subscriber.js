@@ -1,7 +1,10 @@
 const zmq = require('zmq'),
     sock = zmq.socket('sub');
-let set = new Set();
 
+const builder = require('protobufjs').loadProtoFile("./assets/proto/xMsgMeta.proto"),
+    xMsgMeta = builder.build("org.jlab.coda.xmsg.data.xMsgMeta");
+
+let set = new Set();
 
 try {
     var myip = require('quick-local-ip');
@@ -21,9 +24,16 @@ try {
             a.href = "#"
             li.appendChild(a);
             ul.appendChild(li);
+
+            //console.log(meta.dataType);
         }
     });
 
 } catch (err) {
     console.log(err);
+}
+
+function getMimetype(metadata) {
+    var meta = xMsgMeta.decode(metadata);
+    return meta.dataType;
 }
