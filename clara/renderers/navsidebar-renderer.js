@@ -1,5 +1,5 @@
 var ipc = require('electron').ipcRenderer;
-var subscriber = require('./helpers/subscriber');
+var subscriber = require('../helpers/subscriber');
 let set = new Set();
 
 
