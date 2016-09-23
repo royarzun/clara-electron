@@ -1,4 +1,5 @@
 const {app, BrowserWindow, ipcMain} = require('electron')
+var ipc = require('electron').ipcMain;
 
 let mainWindow
 
@@ -30,3 +31,7 @@ function makeSingleInstance () {
     }
   })
 }
+
+ipc.on('errorInWindow', function(event, data){
+    console.log(data)
+});
