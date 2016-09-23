@@ -35,12 +35,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
-                <ul class="nav nav-sidebar">
-                    <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#" id="some-id-for-service">the service</a></li>
-                </ul>
-                <ul class="nav nav-sidebar">
-                    <li><a href="#">Nav item</a></li>
+                <ul class="nav nav-sidebar" id="dpe-list">
+                    <li class="active"><a href="#">DPEs <span class="sr-only">(current)</span></a></li>
                 </ul>
                 <div style="position: absolute;bottom:0;height:130px;">
                     <p>Running using:</p>
@@ -60,6 +56,9 @@
 
     <script>
         require('bootstrap');
+    </script>
+    <script>
+        require('./clara/subscriber.js');
     </script>
 </body>
 

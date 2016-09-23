@@ -14,6 +14,13 @@ try {
         if (!set.has(topic)) {
             set.add(topic);
             console.log(new Date().toLocaleString() + ": DPE found", topic);
+            var ul = document.getElementById('dpe-list');
+            var li = document.createElement("li");
+            var a = document.createElement("a")
+            a.appendChild(document.createTextNode(topic));
+            a.href = "#"
+            li.appendChild(a);
+            ul.appendChild(li);
         }
     });
 
