@@ -48,41 +48,18 @@
                 </div>
             </div>
 
+            <!-- Content div -->
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <h1 class="page-header">Clara</h1>
                 <div id="chart" style="height: 400px"></div>
             </div>
+            <!-- End of content div -->
         </div>
     </div>
 
     <script>require('bootstrap');</script>
     <script>require('./clara/renderers/navsidebar-renderer.js');</script>
-    <script>
-        var Highcharts = require('highcharts');
-
-        // Load module after Highcharts is loaded
-        require('highcharts/modules/exporting')(Highcharts);
-        Highcharts.chart('chart', {
-          title: {
-            text: 'Step line types, with null values in the series'
-          },
-          xAxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-          },
-          series: [{
-            data: [1, 2, 3, 4, null, 6, 7, null, 9],
-            step: 'right',
-            name: 'Right'
-          }, {
-            data: [5, 6, 7, 8, null, 10, 11, null, 13],
-            step: 'center',
-            name: 'Center'
-          }, {
-            data: [9, 10, 11, 12, null, 14, 15, null, 17],
-            step: 'left',
-            name: 'Left'
-          }]});
-    </script>
+    <script>require('./clara/renderers/histogram-renderer.js');</script>
 </body>
 
 </html>

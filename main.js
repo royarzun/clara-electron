@@ -3,9 +3,13 @@ const {
     BrowserWindow,
     ipcMain
 } = require('electron')
-var ipc = require('electron').ipcMain;
+var ipc = ipcMain;
 
 let mainWindow
+
+ipc.on('start-histogram', (event, args) => {
+  event.sender.send('new-histo-config', args)
+})
 
 app.on('ready', function() {
     var mainWindow = new BrowserWindow({
