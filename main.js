@@ -13,8 +13,8 @@ ipc.on('start-histogram', (event, args) => {
 
 app.on('ready', function() {
     var mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1280,
+        height: 900,
         title: "Clara Probe - ClaRA Framework"
     })
     mainWindow.loadURL('file://' + __dirname + '/main.html');
