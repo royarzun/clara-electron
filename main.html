@@ -1,65 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" href="assets/css/sticky-footer.css">
+
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/nativize.css">
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/about.css">
+    <link rel="stylesheet" href="assets/css/nav.css">
+    <link rel="stylesheet" href="assets/css/section.css">
+    <link rel="stylesheet" href="assets/css/demo.css">
+    <link rel="stylesheet" href="assets/css/github.css">
+
+    <link rel="import" href="sections/native-ui/graphs.html">
 </head>
 
 <body>
-    <!-- TOP Navigation bar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-                <a class="navbar-brand" href="#">ClaRA</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Help</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!-- End of Navigation bar -->
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-4 col-md-4 sidebar">
-                <ul class="nav nav-sidebar" id="dpe-list">
-                    <li class="active"><a href="#">Services <span class="sr-only">(current)</span></a></li>
-                </ul>
-                <div style="position:absolute;bottom:0;height:130px;">
-                    <p>Running using:</p>
-                    <ul>
-                        <li><a href="#">Node.js <script>document.write(process.versions.node)</script></a></li>
-                        <li><a href="#">Chromium <script>document.write(process.versions.chrome)</script></a></li>
-                        <li><a href="#">Electron <script>document.write(process.versions.electron)</script></a></li>
-                    </ul>
-                </div>
-            </div>
+  <nav class="nav js-nav">
+    <header class="nav-header">
+      <h1 class="nav-title">Clara <strong>Probe app</strong></h1>
+      <svg class="nav-header-icon"><use xlink:href="assets/img/icons.svg#icon-electron"></use></svg>
+    </header>
 
-            <!-- Content div -->
-            <div class="col-sm-8 col-sm-offset-4 col-md-8 col-md-offset-4 main">
-                <h1 class="page-header">Probe Service</h1>
-                <div id="chart" style="height: 400px"></div>
-            </div>
-            <!-- End of content div -->
-        </div>
+    <div class="nav-item u-category-native-ui">
+      <h5 class="nav-category">
+        <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
+        Available Services</h5>
+      <button type="button" id="button-graphs" data-section="graphs" class="nav-button">Open <em>external links</em> or system <em>file manager</em></button>
     </div>
 
-    <script>require('bootstrap');</script>
-    <script>require('./clara/renderers/navsidebar-renderer.js');</script>
-    <script>require('./clara/renderers/histogram-renderer.js');</script>
-</body>
+    <footer class="nav-footer">
+      <a class="nav-footer-logo" href="https://github.com" aria-label="Homepage">
+        <svg class="nav-footer-icon"><use xlink:href="assets/img/icons.svg#icon-love"></use></svg>
+      </a>
+      <!-- <a class="nav-footer-logo" href="https://nodejs.org/en/">Node.js <script>document.write(process.versions.node)</script></a><br/>
+      <a class="nav-footer-logo" href="https://www.chromium.org/"><svg class="nav-footer-icon"><use xlink:href="assets/img/chromium.svg"></use></svg><script>document.write(process.versions.chrome)</script></a><br/>
+      <a class="nav-footer-logo" href="http://electron.atom.io/">Electron <script>document.write(process.versions.electron)</script></a><br/> -->
+      </ul>
+    </footer>
+  </nav>
 
+  <main class="content js-content"></main>
+
+  <script>
+    require('./assets/js/imports')
+    require('./assets/js/ex-links')
+    require('./assets/js/nav')
+    require('./assets/js/demo-btns')
+    require('./assets/js/code-blocks')
+    require('./assets/js/normalize-shortcuts')
+    require('./clara/renderers/navsidebar-renderer.js');
+    require('./clara/renderers/histogram-renderer.js');
+  </script>
+</body>
 </html>
