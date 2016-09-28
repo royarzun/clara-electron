@@ -1,34 +1,42 @@
+const re = /([^:_%]+(%([\d]+))?_(java|python|cpp)):\w+:\w+$/g;
+const xMsgRegistration = require('../data/registration.js').xMsgRegistration;
 var ipc = require('electron').ipcRenderer;
-var subscriber = require('../helpers/subscriber');
-let set = new Set();
+var myip = require('quick-local-ip');
+var zmq = require('zmq');
+var socket = zmq.socket('req');
 
-
-var aliVeSubscription = new subscriber.Subscriber();
-aliVeSubscription.subscribe('dpeAlive', function(topic, metadata, data) {
-    var topic = data.toString('binary').split('?')[0];
-    if (!set.has(topic)) {
-        set.add(topic);
-
+socket.on("message", function () {
+    // message, sender, status, data[]
+    for (i = 3; i < arguments.length; i++) {
+      var reg = new xMsgRegistration(arguments[i]),
+          m = reg.name.match(re);
+      if (m) {
         var ul = document.getElementById('dpe-list'),
             li = document.createElement('li'),
             a = document.createElement('a');
 
-        a.appendChild(document.createTextNode(topic));
+        a.appendChild(document.createTextNode(m[0]));
         a.href = '#';
-        a.addEventListener('click', function () {
-          ipc.send('start-histogram', topic)
-        });
+
         li.appendChild(a);
         ul.appendChild(li);
-
-        console.log(new Date().toLocaleString() + ': DPE found', topic);
+      }
     }
 });
 
-window.onclosed = function(){
-    aliVeSubscription.unsubscribe()
-};
+socket.connect("tcp://" + myip.getLocalIP4() + ":8888");
+socket.send(["allSubscriber", "probeService", "allSubscriber"]);
 
+
+setTimeout(function() {
+  socket.unref();
+}, 1000);
+
+
+// window.onclosed = function(){
+//    socket.close();
+// };
+//
 window.onerror = function(error, url, line) {
-    ipc.send('errorInWindow', error);
+   ipc.send('errorInWindow', error);
 };
