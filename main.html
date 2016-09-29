@@ -23,11 +23,10 @@
       <svg class="nav-header-icon"><use xlink:href="assets/img/icons.svg#icon-electron"></use></svg>
     </header>
 
-    <div class="nav-item u-category-native-ui">
+    <div id="services-nav" class="nav-item u-category-native-ui">
       <h5 class="nav-category">
         <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
         Available Services</h5>
-      <button type="button" id="button-graphs" data-section="graphs" class="nav-button">Open <em>external links</em> or system <em>file manager</em></button>
     </div>
 
     <footer class="nav-footer">
@@ -50,8 +49,8 @@
     require('./assets/js/demo-btns')
     require('./assets/js/code-blocks')
     require('./assets/js/normalize-shortcuts')
-    require('./clara/renderers/navsidebar-renderer.js');
-    require('./clara/renderers/histogram-renderer.js');
+    require('./clara/renderers/navsidebar-renderer');
+    require('./clara/renderers/histogram-renderer');
   </script>
 </body>
 </html>

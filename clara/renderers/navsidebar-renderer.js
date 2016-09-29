@@ -11,15 +11,18 @@ socket.on("message", function () {
       var reg = new xMsgRegistration(arguments[i]),
           m = reg.name.match(re);
       if (m) {
-        var ul = document.getElementById('dpe-list'),
-            li = document.createElement('li'),
-            a = document.createElement('a');
+        var div = document.getElementById('services-nav'),
+            button = document.createElement('button');
 
-        a.appendChild(document.createTextNode(m[0]));
-        a.href = '#';
-
-        li.appendChild(a);
-        ul.appendChild(li);
+        button.setAttribute('class', 'nav-button');
+        button.setAttribute('data-section', 'graphs');
+        button.setAttribute('id', 'button-graphs');
+        button.setAttribute('type', 'button');
+        button.appendChild(document.createTextNode(m[0]));
+        button.addEventListener('click', function() {
+          ipc.send('start-histogram', m[0]);
+        });
+        div.appendChild(button);
       }
     }
 });
@@ -33,10 +36,10 @@ setTimeout(function() {
 }, 1000);
 
 
-// window.onclosed = function(){
-//    socket.close();
-// };
-//
+window.onclosed = function(){
+   socket.close();
+};
+
 window.onerror = function(error, url, line) {
    ipc.send('errorInWindow', error);
 };
