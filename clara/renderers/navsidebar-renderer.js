@@ -20,7 +20,7 @@ socket.on("message", function () {
         button.setAttribute('type', 'button');
         button.appendChild(document.createTextNode(m[0]));
         button.addEventListener('click', function() {
-          ipc.send('start-histogram', m[0]);
+          ipc.send('start-plotting', m[0]);
         });
         div.appendChild(button);
       }
