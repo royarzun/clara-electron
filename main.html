@@ -20,23 +20,25 @@
   <nav class="nav js-nav">
     <header class="nav-header">
       <h1 class="nav-title">Clara <strong>Probe app</strong></h1>
-      <svg class="nav-header-icon"><use xlink:href="assets/img/icons.svg#icon-electron"></use></svg>
+      <svg class="nav-header-icon">
+        <use xlink:href="assets/img/icons.svg#icon-electron"></use>
+      </svg>
     </header>
 
     <div id="services-nav" class="nav-item u-category-native-ui">
       <h5 class="nav-category">
-        <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
+        <svg class="nav-icon">
+          <use xlink:href="assets/img/icons.svg#icon-native-ui"></use>
+        </svg>
         Available Services</h5>
     </div>
 
     <footer class="nav-footer">
       <a class="nav-footer-logo" href="https://github.com" aria-label="Homepage">
-        <svg class="nav-footer-icon"><use xlink:href="assets/img/icons.svg#icon-love"></use></svg>
+        <svg class="nav-footer-icon">
+          <use xlink:href="assets/img/icons.svg#icon-love"></use>
+        </svg>
       </a>
-      <!-- <a class="nav-footer-logo" href="https://nodejs.org/en/">Node.js <script>document.write(process.versions.node)</script></a><br/>
-      <a class="nav-footer-logo" href="https://www.chromium.org/"><svg class="nav-footer-icon"><use xlink:href="assets/img/chromium.svg"></use></svg><script>document.write(process.versions.chrome)</script></a><br/>
-      <a class="nav-footer-logo" href="http://electron.atom.io/">Electron <script>document.write(process.versions.electron)</script></a><br/> -->
-      </ul>
     </footer>
   </nav>
 
@@ -49,8 +51,8 @@
     require('./assets/js/demo-btns')
     require('./assets/js/code-blocks')
     require('./assets/js/normalize-shortcuts')
-    require('./clara/renderers/navsidebar-renderer');
-    require('./clara/renderers/histogram-renderer');
   </script>
+  <script>require('./clara/renderers/histogram-renderer');</script>
+  <script>require('./clara/renderers/navsidebar-renderer');</script>
 </body>
 </html>
