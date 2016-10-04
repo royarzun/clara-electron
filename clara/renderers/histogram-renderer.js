@@ -2,12 +2,9 @@ const {ipcRenderer} = require('electron');
 var cp = require('child_process');
 
 
-var service;
-
 window.onerror = function(error, url, line) {
     ipcRenderer.send('errorInWindow', error);
 };
-
 
 ipcRenderer.on('new-histo-config', (event, args) => {
   // args[0] includes the topic of the service
@@ -19,14 +16,20 @@ ipcRenderer.on('set-service-to-subscribe', (event, args) => {
 })
 
 var child = cp.fork('./clara/renderers/subscriber-renderer');
-
 child.on('message', function(args){
   // here i receive the data for the plot
-  require('../helpers/1_d_histogram').oneDimensionalHisto(args);
+  if (args.h1f) require('../helpers/1_d_histogram').oneDimensionalHisto(args.h1f);
+  if (args.h2f) require('../helpers/2_d_histogram').twoDimensionalHisto(args.h2f);
 });
 
-var one_d_histo = document.getElementById('start-1d-histo');
-one_d_histo.addEventListener('click', function () {
-    child.send('');
+var buttonH1 = document.getElementById('h1f-button');
+buttonH1.addEventListener('click', function(){
     ipcRenderer.send('logger', 'Launching 1D Histogram');
+    child.send('h1f');
+});
+
+var buttonH2 = document.getElementById('h2f-button');
+buttonH2.addEventListener('click', function(){
+    ipcRenderer.send('logger', 'Launching 2D Histogram');
+    child.send('h2f');
 });
