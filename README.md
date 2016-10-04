@@ -1,10 +1,24 @@
 # ClaRA Probe Service UI
 
-## System requirements
+App built with [electron](http://electron.atom.io/). Proof of concept using the
+NAIADS histogram services, The app subscribes to the output of a running Service
+and builds the respective graphs, for this case we get:
 
-- Node.js
+- 1D Histogram
+- 2D Histogram
+- 1D Profile
+- 2D Profile
 
-## How to run the app
+
+## Quick Start
+
+### System requirements
+
+- Node.js (>=6.0)
+- pkg-config (>=0.29)
+
+
+### How to run the app
 
 - Set up dependencies:
 
