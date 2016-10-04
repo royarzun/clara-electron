@@ -1,6 +1,5 @@
 const Highcharts = require('highcharts');
 require('highcharts/modules/exporting')(Highcharts);
-var ipc = require('electron').ipcRenderer;
 
 function getAxisInfo(units, func, type) {
     if (units == "day") {
@@ -47,10 +46,9 @@ function loadIHistogram1D(obj) {
         chart: {
             defaultSeriesType: 'column',
             borderColor: '#ccc',
-            plotBackgroundColor: '#fff',
-            backgroundColor: '#ffffff',
+            backgroundColor:'rgba(255, 255, 255, 0.1)',
             plotBorderColor: '#ccc',
-            marginRight: 150,
+            marginRight: 100,
             zoomType: 'xy'
         },
         credits: {
@@ -60,10 +58,10 @@ function loadIHistogram1D(obj) {
             enabled: true
         },
         title: {
-            text: "title"
+            text: obj.annotation.Title
         },
         subtitle: {
-            text: "1D Histogram: " // + path
+            text: '1D Histogram: ' + obj.annotation.FullPath
         },
         legend: {
             align: 'right',
@@ -184,7 +182,6 @@ function chartbox(chart, text) {
         verticalAlign: 'bottom',
         y: 0 // offset
     }), null, 'spacingBox');
-
 }
 
 exports.oneDimensionalHisto = loadIHistogram1D;
