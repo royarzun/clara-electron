@@ -100,8 +100,20 @@ var p2f_json = {
 }
 
 process.on('message', function(args) {
-  if (args == "h1f") process.send({ "h1f" : h1f_json });
-  if (args == "h2f") process.send({ "h2f" : h2f_json });
-  if (args == "p1f") process.send({ "p1f" : p1f_json });
-  if (args == "p2f") process.send({ "p2f" : p2f_json });
+  switch (args) {
+    case "h1f":
+      process.send({ "h1f" : h1f_json });
+      break;
+    case "h2f":
+      process.send({ "h2f" : h2f_json });
+      break;
+    case "p1f":
+      process.send({ "p1f" : p1f_json });
+      break;
+    case "p2f":
+      process.send({ "p2f" : p2f_json });
+      break;
+    default:
+      return;
+  }
 });

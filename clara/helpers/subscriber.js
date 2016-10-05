@@ -1,24 +1,15 @@
-var ipc = require('electron').ipcRenderer;
-
-let set = new Set();
-
-
-//window.onerror = function(error, url, line) {
-//    ipc.send('errorInWindow', error);
-//};
 
 class Subscriber {
 
-    constructor() {
+    constructor(topic) {
         this.sock = require('zmq').socket('sub');
-        this.topic = '';
+        this.topic = topic;
     }
 
-    subscribe(sub_topic, callback) {
+    subscribe(callback) {
         var myip = require('quick-local-ip');
         this.sock.connect('tcp://' + myip.getLocalIP4() + ':7772');
-        this.topic = sub_topic;
-        this.sock.subscribe(sub_topic);
+        this.sock.subscribe(this.topic);
         console.log('Subscriber connected to clara SUB port: 7772');
         this.sock.on('message', callback);
     }
