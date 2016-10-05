@@ -5,10 +5,10 @@ var utils = require('./graph_utils');
 
 
 function loadIHistogram2D(obj) {
-    var xAxisInfo = utils.getAxisInfo(obj.annotation.xUnits);
-    var yAxisInfo = utils.getAxisInfo(obj.annotation.yUnits);
+    var xAxisInfo = utils.getAxisInfo(obj.annotation.xUnits),
+        yAxisInfo = utils.getAxisInfo(obj.annotation.yUnits);
 
-    var xAxisLabel;
+    var xAxisLabel, yAxisLabel;
 
     // set axis label if provided
     if (obj.annotation.xAxisLabel) {
@@ -22,9 +22,6 @@ function loadIHistogram2D(obj) {
     } else if (obj.annotation.xUnits) {
         xAxisLabel = xAxisLabel.concat(" (" + obj.annotation.xUnits + ")");
     }
-
-
-    var yAxisLabel;
 
     if (obj.annotation.yAxisLabel) {
         yAxisLabel = obj.annotation.yAxisLabel;
@@ -42,8 +39,8 @@ function loadIHistogram2D(obj) {
     }
 
     // ADB: highcharts seems to muck up the yAxis max somehow...?
-    var ymin = yAxisInfo.func(obj.yAxis.centers[0]);
-    var ymax = yAxisInfo.func(obj.yAxis.centers[0]);
+    var ymin = yAxisInfo.func(obj.yAxis.centers[0]),
+        ymax = yAxisInfo.func(obj.yAxis.centers[0]);
     for (var j = 0; j < obj.yAxis.centers.length; j++) {
         var yhi = yAxisInfo.func(obj.yAxis.centers[j] + obj.yAxis.binWidth);
         var ylo = yAxisInfo.func(obj.yAxis.centers[j] - obj.yAxis.binWidth);
@@ -54,12 +51,10 @@ function loadIHistogram2D(obj) {
         }
     }
 
-    var countmax = null;
-    var countmin = null
-        // build the series data
-        // 2D array, X & Y values and count for each point
-        // X is the center of the histo bin, Y is the count
-    var counts = new Array();
+    var countmax = null,
+        countmin = null,
+        counts = new Array();
+
     for (var i = 0; i < obj.xAxis.centers.length; i++) {
 
         for (var j = 0; j < obj.yAxis.centers.length; j++) {
@@ -78,8 +73,8 @@ function loadIHistogram2D(obj) {
         }
     }
 
-    var xbinWidth = xAxisInfo.func(obj.xAxis.centers[0] + obj.xAxis.binWidth) - xAxisInfo.func(obj.xAxis.centers[0]);
-    var ybinWidth = yAxisInfo.func(obj.yAxis.centers[0] + obj.yAxis.binWidth) - yAxisInfo.func(obj.yAxis.centers[0]);
+    var xbinWidth = xAxisInfo.func(obj.xAxis.centers[0] + obj.xAxis.binWidth) - xAxisInfo.func(obj.xAxis.centers[0]),
+        ybinWidth = yAxisInfo.func(obj.yAxis.centers[0] + obj.yAxis.binWidth) - yAxisInfo.func(obj.yAxis.centers[0]);
 
     Highcharts.chart('2d-chart', {
         chart: {
@@ -131,17 +126,17 @@ function loadIHistogram2D(obj) {
             borderWidth: 1,
             formatter: (function() {
                 // bin width could be in newer unit
-                var xbinWidth = xAxisInfo.func(obj.xAxis.centers[0] + obj.xAxis.binWidth) - xAxisInfo.func(obj.xAxis.centers[0]);
-                var ybinWidth = yAxisInfo.func(obj.yAxis.centers[0] + obj.yAxis.binWidth) - yAxisInfo.func(obj.yAxis.centers[0]);
+                var xbinWidth = xAxisInfo.func(obj.xAxis.centers[0] + obj.xAxis.binWidth) - xAxisInfo.func(obj.xAxis.centers[0]),
+                    ybinWidth = yAxisInfo.func(obj.yAxis.centers[0] + obj.yAxis.binWidth) - yAxisInfo.func(obj.yAxis.centers[0]);
 
-                var isxdate = xAxisInfo.type == "datetime";
-                var isydate = yAxisInfo.type == "datetime";
+                var isxdate = xAxisInfo.type == "datetime",
+                    isydate = yAxisInfo.type == "datetime";
                 return function() {
 
-                    var xmin = (+this.point.x) - xbinWidth / 2.0;
-                    var xmax = (+this.point.x) + xbinWidth / 2.0;
-                    var ymin = (+this.point.y) - ybinWidth / 2.0;
-                    var ymax = (+this.point.y) + ybinWidth / 2.0;
+                    var xmin = (+this.point.x) - xbinWidth / 2.0,
+                        xmax = (+this.point.x) + xbinWidth / 2.0,
+                        ymin = (+this.point.y) - ybinWidth / 2.0,
+                        ymax = (+this.point.y) + ybinWidth / 2.0;
 
                     if (isxdate) {
                         var d = new Date(xmin);
@@ -178,7 +173,7 @@ function loadIHistogram2D(obj) {
             heatmap: {
                 shadow: false,
                 colsize: xbinWidth,
-                rowsize: ybinWidth
+                rowsize: ybinWidthz
             }
         },
         series: [{
@@ -200,8 +195,7 @@ function loadIHistogram2D(obj) {
         ystd = +(obj.yStd_dev.toFixed(6));
     }
 
-    var xmean;
-    var xstd;
+    var xmean, xstd;
     if (xAxisInfo.type == "datetime") {
         var d = new Date(xAxisInfo.func(obj.xMean));
         xmean = d.toUTCString();
@@ -218,6 +212,5 @@ function loadIHistogram2D(obj) {
         "<b>Y mean:</b> " + ymean + "<br/>" +
         "<b>Y std dev:</b> " + ystd);
 }
-
 
 exports.twoDimensionalHisto = loadIHistogram2D;
