@@ -45,18 +45,9 @@
         </button>
         <div class="demo-box">
           <div class="demo-controls">
-            <button class="demo-button" id="information-dialog">View Demo</button>
-            <span class="demo-response" id="info-selection"></span>
+            <button class="demo-button" id="p1f-button">Start Plotting</button>
           </div>
-          <p>In this demo, the <code>ipc</code> module is used to send a message from the renderer process instructing the main process to launch the information dialog. Options may be provided for responses which can then be relayed back to the renderer process.</p>
-
-          <p>Note: The <code>title</code> property is not displayed in OS X.</p>
-
-          <p>An information dialog can contain an icon, your choice of buttons, title and message.</p>
-          <h5>Renderer Process</h5>
-          <pre><code data-path="renderer-process/native-ui/dialogs/information.js"></pre></code>
-          <h5>Main Process</h5>
-          <pre><code data-path="main-process/native-ui/dialogs/information.js"></code></pre>
+          <div id="1d-profile"></div>
         </div>
       </div>
     </div>

@@ -20,6 +20,7 @@ child.on('message', function(args){
   // here i receive the data for the plot
   if (args.h1f) require('../helpers/1_d_histogram').oneDimensionalHisto(args.h1f);
   if (args.h2f) require('../helpers/2_d_histogram').twoDimensionalHisto(args.h2f);
+  if (args.p1f) require('../helpers/1_d_profile').oneDimensionalProfile(args.p1f);
 });
 
 var buttonH1 = document.getElementById('h1f-button');
@@ -32,4 +33,10 @@ var buttonH2 = document.getElementById('h2f-button');
 buttonH2.addEventListener('click', function(){
     ipcRenderer.send('logger', 'Launching 2D Histogram');
     child.send('h2f');
+});
+
+var buttonP1 = document.getElementById('p1f-button');
+buttonP1.addEventListener('click', function(){
+    ipcRenderer.send('logger', 'Launching 1D Profile');
+    child.send('p1f');
 });
