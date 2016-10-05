@@ -61,18 +61,17 @@ function loadProfile1D(obj) {
     Highcharts.chart('1d-profile', {
         chart: {
             defaultSeriesType: 'line',
-            backgroundColor: '#ffffff',
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
             borderColor: '#ccc',
-            plotBackgroundColor: '#fff',
             plotBorderColor: '#ccc',
-            marginRight: 150,
+            marginRight: 100,
             zoomType: 'xy'
         },
         title: {
-            text: "title"
+            text: obj.annotation.Title
         },
         subtitle: {
-            text: "1D Profile: "
+            text: "1D Profile: " + obj.annotation.FullPath
         },
         credits: {
             enabled: false

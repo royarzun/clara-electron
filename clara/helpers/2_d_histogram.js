@@ -173,7 +173,7 @@ function loadIHistogram2D(obj) {
             heatmap: {
                 shadow: false,
                 colsize: xbinWidth,
-                rowsize: ybinWidthz
+                rowsize: ybinWidth
             }
         },
         series: [{
