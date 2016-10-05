@@ -2,10 +2,11 @@
   "name": "clara-electron",
   "version": "1.0.0",
   "description": "Clara as a web/desktop app using electron from github.com",
-  "main": "clara/index.js",
+  "main": "main.js",
   "scripts": {
-    "start": "electron clara/index.js",
-    "test": "test"
+    "start": "electron main.js",
+    "test": "mocha tests && npm run lint",
+    "postinstall": "electron-rebuild"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,23 @@
   },
   "homepage": "https://github.com/royarzun/clara-electron#readme",
   "devDependencies": {
+    "bootstrap": "^3.3.7",
     "electron": "^1.4.0",
+    "electron-json-storage": "^2.0.0",
+    "electron-rebuild": "^1.2.1",
+    "electron-shortcut-normalizer": "^1.0.0",
+    "glob": "^6.0.4",
+    "highcharts": "^4.2.7",
+    "highcharts-more": "^0.1.2",
+    "highlight.js": "^9.3.0",
+    "mocha": "^3.0.2",
+    "protobufjs": "^5.0.1",
+    "quick-local-ip": "^1.0.7",
     "zmq": "^2.15.3"
+  },
+  "standard": {
+    "env": {
+      "mocha": true
+    }
   }
 }

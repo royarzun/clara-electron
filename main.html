@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/nativize.css">
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/about.css">
+    <link rel="stylesheet" href="assets/css/nav.css">
+    <link rel="stylesheet" href="assets/css/section.css">
+    <link rel="stylesheet" href="assets/css/demo.css">
+    <link rel="stylesheet" href="assets/css/github.css">
+
+    <link rel="import" href="sections/native-ui/graphs.html">
+</head>
+
+<body>
+
+  <nav class="nav js-nav">
+    <header class="nav-header">
+      <h1 class="nav-title">Clara <strong>Probe app</strong></h1>
+      <svg class="nav-header-icon">
+        <use xlink:href="assets/img/icons.svg#icon-electron"></use>
+      </svg>
+    </header>
+
+    <div id="nav-services" class="nav-item u-category-native-ui">
+      <h5 class="nav-category">2
+        <svg class="nav-icon">
+          <use xlink:href="assets/img/icons.svg#icon-native-ui"></use>
+        </svg>
+        Available Services</h5>
+    </div>
+
+    <footer class="nav-footer">
+      <a class="nav-footer-logo" href="https://github.com" aria-label="Homepage">
+        <svg class="nav-footer-icon">
+          <use xlink:href="assets/img/icons.svg#icon-love"></use>
+        </svg>
+      </a>
+    </footer>
+  </nav>
+
+  <main class="content js-content"></main>
+
+  <script>
+    require('./assets/js/imports')
+    require('./assets/js/ex-links')
+    require('./assets/js/nav')
+    require('./assets/js/demo-btns')
+    require('./assets/js/code-blocks')
+    require('./assets/js/normalize-shortcuts')
+  </script>
+  <script>require('./clara/renderers/navsidebar-renderer');</script>
+  <script>require('./clara/renderers/histogram-renderer');</script>
+</body>
+</html>

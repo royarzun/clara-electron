@@ -1,0 +1,78 @@
+<template class="task-template">
+  <section id="graphs-section" class="section js-section u-category-native-ui">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
+          Service Graphical data
+        </h1>
+        <h3>The <code>Service</code>can provide in its description the kind of graphics that can Draw</h3>
+      </div>
+    </header>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="open-file-demo-toggle" class="js-container-target demo-toggle-button">One Dimension Histogram
+          <div class="demo-meta u-avoid-clicks">HighCharts.js</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="h1f-button">Start Plotting</button>
+          </div>
+          <div id="1d-chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="error-dialog-demo-toggle" class="js-container-target demo-toggle-button">Two Dimensions Histogram
+          <div class="demo-meta u-avoid-clicks">HighCharts.js</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="h2f-button">Start Plotting</button>
+          </div>
+          <div id="2d-chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="information-dialog-demo-toggle" class="js-container-target demo-toggle-button">One Dimension Profile
+          <div class="demo-meta u-avoid-clicks">HighCharts.js</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="p1f-button">Start Plotting</button>
+          </div>
+          <div id="1d-profile"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="save-dialog-demo-toggle" class="js-container-target demo-toggle-button">Two Dimension Profile
+          <div class="demo-meta u-avoid-clicks">HighCharts.js</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="p2f-button">Start Plotting</button>
+          </div>
+          <div id="2d-profile"></div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      require('../../renderers/histogram-renderer.js');
+      // require('./renderer-process/native-ui/dialogs/open-file')
+      // require('./renderer-process/native-ui/dialogs/error')
+      // require('./renderer-process/native-ui/dialogs/information')
+      // require('./renderer-process/native-ui/dialogs/save')
+    </script>
+
+  </section>
+</template>
