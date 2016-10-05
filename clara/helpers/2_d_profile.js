@@ -87,7 +87,7 @@ function loadIProfile2D(obj) {
     var xbinWidth = xAxisInfo.func(obj.xAxis.centers[0] + obj.xAxis.binWidth) - xAxisInfo.func(obj.xAxis.centers[0]),
         ybinWidth = yAxisInfo.func(obj.yAxis.centers[0] + obj.yAxis.binWidth) - yAxisInfo.func(obj.yAxis.centers[0]);
 
-    Highcharts.chart('2d-profile', {
+    var chart = Highcharts.chart('2d-profile', {
         chart: {
             marginTop: 70,
             marginBottom: 80,

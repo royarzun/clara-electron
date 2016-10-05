@@ -21,7 +21,7 @@ function loadIHistogram1D(obj) {
     }
 
     // 1D histogam config
-    Highcharts.chart('1d-chart', {
+    var chart = Highcharts.chart('1d-chart', {
         chart: {
             defaultSeriesType: 'column',
             borderColor: '#ccc',

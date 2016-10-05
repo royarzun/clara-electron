@@ -62,6 +62,8 @@ function julienDayToUTC(jd) {
     return unix_secs * 1000;
 }
 
+var iecToUNIX = Date.parse("Jan 1, 1958");
+
 function iecToUTC(iec) {
     // iet is microseconds since 1/1/1958
     return iec / 1000.0 + iecToUNIX;
