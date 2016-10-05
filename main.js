@@ -31,7 +31,7 @@ app.on('ready', function() {
 
 app.on('closed', function() {
     app.quit();
-})
+});
 
 ipc.on('errorInWindow', function(event, data) {
     console.log(data);

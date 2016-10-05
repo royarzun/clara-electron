@@ -59,14 +59,9 @@
         </button>
         <div class="demo-box">
           <div class="demo-controls">
-            <button class="demo-button" id="save-dialog">View Demo</button>
-            <span class="demo-response" id="file-saved"></span>
+            <button class="demo-button" id="p2f-button">Start Plotting</button>
           </div>
-          <p>In this demo, the <code>ipc</code> module is used to send a message from the renderer process instructing the main process to launch the save dialog. It returns the path selected by the user which can be relayed back to the renderer process.</p>
-          <h5>Renderer Process</h5>
-          <pre><code data-path="renderer-process/native-ui/dialogs/save.js"></pre></code>
-          <h5>Main Process</h5>
-          <pre><code data-path="main-process/native-ui/dialogs/save.js"></code></pre>
+          <div id="2d-profile"></div>
         </div>
       </div>
     </div>

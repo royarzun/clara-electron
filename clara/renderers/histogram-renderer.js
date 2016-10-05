@@ -21,6 +21,7 @@ child.on('message', function(args){
   if (args.h1f) require('../helpers/1_d_histogram').oneDimensionalHisto(args.h1f);
   if (args.h2f) require('../helpers/2_d_histogram').twoDimensionalHisto(args.h2f);
   if (args.p1f) require('../helpers/1_d_profile').oneDimensionalProfile(args.p1f);
+  if (args.p2f) require('../helpers/2_d_profile').twoDimensionalProfile(args.p2f);
 });
 
 var buttonH1 = document.getElementById('h1f-button');
@@ -39,4 +40,10 @@ var buttonP1 = document.getElementById('p1f-button');
 buttonP1.addEventListener('click', function(){
     ipcRenderer.send('logger', 'Launching 1D Profile');
     child.send('p1f');
+});
+
+var buttonP2 = document.getElementById('p2f-button');
+buttonP2.addEventListener('click', function(){
+    ipcRenderer.send('logger', 'Launching 2D Profile');
+    child.send('p2f');
 });
