@@ -1,32 +1,11 @@
 const Highcharts = require('highcharts');
 require('highcharts/modules/exporting')(Highcharts);
 
-function getAxisInfo(units, func, type) {
-    if (units == "day") {
-        return {
-            type: "datetime",
-            func: julienDayToUTC
-        };
-    } else if (units == "UTC - yymmdd.ffffffff") {
-        return {
-            type: "datetime",
-            func: yymmddToUTC
-        };
-    } else if (units == "iec") {
-        return {
-            type: "datetime",
-            func: iecToUTC
-        };
-    } else {
-        return {
-            type: "linear",
-            func: noop
-        };
-    }
-}
+var utils = require('./graph_utils');
+
 
 function loadIHistogram1D(obj) {
-    var xAxisInfo = getAxisInfo(obj.annotation.xUnits);
+    var xAxisInfo = utils.getAxisInfo(obj.annotation.xUnits);
     var xAxisLabel = obj.annotation.xAxisLabel;
 
     if (xAxisInfo.type == "datetime") {
@@ -149,39 +128,10 @@ function loadIHistogram1D(obj) {
         std = +(obj.std_dev.toFixed(6));
     }
 
-    chartbox(chart, "<b>Count:</b> " + obj.count + "<br/>" +
+    utils.chartbox(chart, "<b>Count:</b> " + obj.count + "<br/>" +
         "<b>Mean:</b> " + mean + "<br/>" +
         "<b>Std Dev:</b> " + std);
 }
 
-function noop(val) {
-    return val;
-}
-
-function jq(myid) {
-    return "C" + myid.replace(/\(|\)|:|\.|\[|\]|,|\/| |=/g, '');
-}
-
-function chartbox(chart, text) {
-
-    var label = chart.renderer.label(text)
-        .css({
-            width: '180px'
-        })
-        .attr({
-            'stroke': 'silver',
-            'stroke-width': 1,
-            'r': 5,
-            'padding': 10
-        })
-        .add();
-
-    label.align(Highcharts.extend(label.getBBox(), {
-        align: 'right',
-        x: 0, // offset
-        verticalAlign: 'bottom',
-        y: 0 // offset
-    }), null, 'spacingBox');
-}
 
 exports.oneDimensionalHisto = loadIHistogram1D;

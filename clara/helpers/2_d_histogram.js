@@ -1,34 +1,12 @@
 const Highcharts = require('highcharts');
 require('highcharts/modules/heatmap')(Highcharts);
 
+var utils = require('./graph_utils');
 
-function getAxisInfo(units, func, type) {
-    if (units == "day") {
-        return {
-            type: "datetime",
-            func: julienDayToUTC
-        };
-    } else if (units == "UTC - yymmdd.ffffffff") {
-        return {
-            type: "datetime",
-            func: yymmddToUTC
-        };
-    } else if (units == "iec") {
-        return {
-            type: "datetime",
-            func: iecToUTC
-        };
-    } else {
-        return {
-            type: "linear",
-            func: noop
-        };
-    }
-}
 
 function loadIHistogram2D(obj) {
-    var xAxisInfo = getAxisInfo(obj.annotation.xUnits);
-    var yAxisInfo = getAxisInfo(obj.annotation.yUnits);
+    var xAxisInfo = utils.getAxisInfo(obj.annotation.xUnits);
+    var yAxisInfo = utils.getAxisInfo(obj.annotation.yUnits);
 
     var xAxisLabel;
 
@@ -234,41 +212,12 @@ function loadIHistogram2D(obj) {
         xstd = +(obj.xStd_dev.toFixed(6));
     }
 
-    chartbox(chart, "<b>Count:</b> " + obj.count + "<br/>" +
+    utils.chartbox(chart, "<b>Count:</b> " + obj.count + "<br/>" +
         "<b>X mean:</b> " + xmean + "<br/>" +
         "<b>X std dev:</b> " + xstd + "<br/>" +
         "<b>Y mean:</b> " + ymean + "<br/>" +
         "<b>Y std dev:</b> " + ystd);
 }
 
-function noop(val) {
-    return val;
-}
-
-function jq(myid) {
-    return "C" + myid.replace(/\(|\)|:|\.|\[|\]|,|\/| |=/g, '');
-}
-
-function chartbox(chart, text) {
-
-    var label = chart.renderer.label(text)
-        .css({
-            width: '180px'
-        })
-        .attr({
-            'stroke': 'silver',
-            'stroke-width': 1,
-            'r': 5,
-            'padding': 10
-        })
-        .add();
-
-    label.align(Highcharts.extend(label.getBBox(), {
-        align: 'right',
-        x: 0, // offset
-        verticalAlign: 'bottom',
-        y: 0 // offset
-    }), null, 'spacingBox');
-}
 
 exports.twoDimensionalHisto = loadIHistogram2D;
