@@ -31,6 +31,14 @@ $ npm install
 $ npm start
 ```
 
+## Screenshots
+
+![Screenshot 1](https://raw.githubusercontent.com/royarzun/clara-electron/dev/assets/screenshots/1.png)
+
+![Screenshot 2](https://raw.githubusercontent.com/royarzun/clara-electron/dev/assets/screenshots/2.png)
+
+![Screenshot 3](https://raw.githubusercontent.com/royarzun/clara-electron/dev/assets/screenshots/3.png)
+
 ## License
 
     Copyright 2016 Ricardo Oyarzun
