@@ -99,18 +99,32 @@ var p2f_json = {
   }
 }
 
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length; i; i--) {
+        j = Math.floor(Math.random() * i);
+        x = a[i - 1];
+        a[i - 1] = a[j];
+        a[j] = x;
+    }
+}
+
 process.on('message', function(args) {
   switch (args) {
     case "h1f":
+      shuffle(h1f_json.counts);
       process.send({ "h1f" : h1f_json });
       break;
     case "h2f":
+      shuffle(h2f_json.counts);
       process.send({ "h2f" : h2f_json });
       break;
     case "p1f":
+      shuffle(p1f_json.counts);
       process.send({ "p1f" : p1f_json });
       break;
     case "p2f":
+      shuffle(p2f_json.counts);
       process.send({ "p2f" : p2f_json });
       break;
     default:
