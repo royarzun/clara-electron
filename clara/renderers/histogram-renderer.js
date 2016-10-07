@@ -8,12 +8,20 @@ window.onerror = function(error, url, line) {
     ipcRenderer.send('errorInWindow', error);
 };
 
+var subscribers = []
 // Find all buttons that were created in the step before:
 for (elementId in document.getElementsByClassName('trigger')){
   var element = document.getElementById(elementId);
   if (element) {
     element.addEventListener('click', function(){
-      child.send(this.id.replace('-button', ''));
+      var id = this.id.replace('-button', '');
+      if (this.textContent == "Start"){
+        subscribers[id] = setInterval(function(){child.send(id);}, 5000);
+        this.textContent = "Stop";
+      } else {
+        this.textContent = "Start";
+        clearInterval(subscribers[id]);
+      }
     });
   }
 }
