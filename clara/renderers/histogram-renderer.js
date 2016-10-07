@@ -8,25 +8,15 @@ window.onerror = function(error, url, line) {
     ipcRenderer.send('errorInWindow', error);
 };
 
-document.getElementById('h1f-button').addEventListener('click', function() {
-    ipcRenderer.send('logger', 'Launching 1D Histogram');
-    child.send('h1f');
-});
-
-document.getElementById('h2f-button').addEventListener('click', function() {
-    ipcRenderer.send('logger', 'Launching 2D Histogram');
-    child.send('h2f');
-});
-
-document.getElementById('p1f-button').addEventListener('click', function() {
-    ipcRenderer.send('logger', 'Launching 1D Profile');
-    child.send('p1f');
-});
-
-document.getElementById('p2f-button').addEventListener('click', function() {
-    ipcRenderer.send('logger', 'Launching 2D Profile');
-    child.send('p2f');
-});
+// Find all buttons that were created in the step before:
+for (elementId in document.getElementsByClassName('trigger')){
+  var element = document.getElementById(elementId);
+  if (element) {
+    element.addEventListener('click', function(){
+      child.send(this.id.replace('-button', ''));
+    });
+  }
+}
 
 ipcRenderer.on('new-histo-config', (event, args) => {
     // args[0] includes the topic of the service
