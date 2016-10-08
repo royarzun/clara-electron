@@ -4,7 +4,7 @@ require('highcharts/modules/exporting')(Highcharts);
 var utils = require('./graph_utils');
 
 
-function loadIHistogram1D(obj) {
+function loadHistogram1D(obj) {
     var xAxisInfo = utils.getAxisInfo(obj.annotation.xUnits);
     var xAxisLabel = obj.annotation.xAxisLabel;
 
@@ -21,7 +21,7 @@ function loadIHistogram1D(obj) {
     }
 
     // 1D histogam config
-    var chart = Highcharts.chart('1d-chart', {
+    var chart = Highcharts.chart('h1f-graph', {
         chart: {
             defaultSeriesType: 'column',
             borderColor: '#ccc',
@@ -134,4 +134,4 @@ function loadIHistogram1D(obj) {
 }
 
 
-exports.oneDimensionalHisto = loadIHistogram1D;
+exports.oneDimensionalHisto = loadHistogram1D;

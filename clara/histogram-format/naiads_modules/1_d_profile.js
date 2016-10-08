@@ -58,7 +58,7 @@ function loadProfile1D(obj) {
     }
 
     // 1D profile prototype
-    var chart = Highcharts.chart('1d-profile', {
+    var chart = Highcharts.chart('p1f-graph', {
         chart: {
             defaultSeriesType: 'line',
             backgroundColor: 'rgba(255, 255, 255, 0.1)',

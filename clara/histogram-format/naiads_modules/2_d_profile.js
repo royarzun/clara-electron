@@ -4,7 +4,7 @@ require('highcharts/modules/heatmap')(Highcharts);
 var utils = require('./graph_utils');
 
 
-function loadIHistogram2D(obj) {
+function loadIProfile2D(obj) {
     var xAxisInfo = utils.getAxisInfo(obj.annotation.xUnits),
         yAxisInfo = utils.getAxisInfo(obj.annotation.yUnits);
 
@@ -38,7 +38,6 @@ function loadIHistogram2D(obj) {
         yaxis_x = 0;
     }
 
-    // ADB: highcharts seems to muck up the yAxis max somehow...?
     var ymin = yAxisInfo.func(obj.yAxis.centers[0]),
         ymax = yAxisInfo.func(obj.yAxis.centers[0]);
     for (var j = 0; j < obj.yAxis.centers.length; j++) {
@@ -51,24 +50,36 @@ function loadIHistogram2D(obj) {
         }
     }
 
-    var countmax = null,
-        countmin = null,
-        counts = new Array();
+    // get data axis min/max if available
+    var meanmax = null,
+        meanmin = null;
 
+    // set requested mean & max
+    if (obj.annotation.dataMin) {
+        meanmin = +obj.annotation.dataMin;
+    }
+    if (obj.annotation.dataMax) {
+        meanmax = +obj.annotation.dataMax;
+    }
+
+    // build the series data
+    // 2D array, X & Y values and count for each point
+    // X is the center of the histo x bin, Y is center of histo y bin
+    var means = new Array();
     for (var i = 0; i < obj.xAxis.centers.length; i++) {
 
         for (var j = 0; j < obj.yAxis.centers.length; j++) {
+            if (obj.counts[i][j] != 0) {
+                means.push([xAxisInfo.func(obj.xAxis.centers[i]), yAxisInfo.func(obj.yAxis.centers[j]), obj.means[i][j]]);
 
-            if (obj.counts[i][j] > 0) {
-                counts.push([xAxisInfo.func(obj.xAxis.centers[i]), yAxisInfo.func(obj.yAxis.centers[j]), obj.counts[i][j]]);
-
-                if (obj.counts[i][j] > countmax || countmax == null) {
-                    countmax = obj.counts[i][j];
-                } else if (obj.counts[i][j] < countmin || countmin == null) {
-                    countmin = obj.counts[i][j];
+                if (!obj.annotation.dataMax && (obj.means[i][j] > meanmax || meanmax == null)) {
+                    meanmax = obj.means[i][j];
+                } else if (!obj.annotation.dataMin && (obj.means[i][j] < meanmin || meanmin == null)) {
+                    meanmin = obj.means[i][j];
                 }
             } else {
-                counts.push([xAxisInfo.func(obj.xAxis.centers[i]), yAxisInfo.func(obj.yAxis.centers[j]), null]);
+                // count is zero so there can be no real "mean"
+                means.push([xAxisInfo.func(obj.xAxis.centers[i]), yAxisInfo.func(obj.yAxis.centers[j]), null]);
             }
         }
     }
@@ -76,7 +87,7 @@ function loadIHistogram2D(obj) {
     var xbinWidth = xAxisInfo.func(obj.xAxis.centers[0] + obj.xAxis.binWidth) - xAxisInfo.func(obj.xAxis.centers[0]),
         ybinWidth = yAxisInfo.func(obj.yAxis.centers[0] + obj.yAxis.binWidth) - yAxisInfo.func(obj.yAxis.centers[0]);
 
-    var chart = Highcharts.chart('2d-chart', {
+    var chart = Highcharts.chart('p2f-graph', {
         chart: {
             marginTop: 70,
             marginBottom: 80,
@@ -89,7 +100,7 @@ function loadIHistogram2D(obj) {
             text: obj.annotation.Title
         },
         subtitle: {
-            text: "2D Histogram: " + obj.annotation.FullPath
+            text: "2D Profile: " + obj.annotation.FullPath
         },
         xAxis: {
             title: {
@@ -108,8 +119,9 @@ function loadIHistogram2D(obj) {
             endOnTick: false
         },
         colorAxis: {
-            min: countmin,
-            max: countmax,
+            endontick: !obj.annotation.dataMax,
+            min: meanmin,
+            max: meanmax,
             stops: [
                 [0, '#3060cf'],
                 [0.5, '#fffbbc'],
@@ -130,7 +142,9 @@ function loadIHistogram2D(obj) {
                     ybinWidth = yAxisInfo.func(obj.yAxis.centers[0] + obj.yAxis.binWidth) - yAxisInfo.func(obj.yAxis.centers[0]);
 
                 var isxdate = xAxisInfo.type == "datetime",
-                    isydate = yAxisInfo.type == "datetime";
+                    isydate = yAxisInfo.type == "datetime",
+                    counts = obj.counts,
+                    errors = obj.errors;
                 return function() {
 
                     var xmin = (+this.point.x) - xbinWidth / 2.0,
@@ -158,14 +172,22 @@ function loadIHistogram2D(obj) {
                         ymax = +ymax.toFixed(6);
                     }
 
-                    var count = this.point.value;
-                    if (count == null) {
-                        count = "N/A";
+                    var mean = this.point.value;
+                    if (mean == null) {
+                        mean = "N/A";
+                    } else {
+                        mean = mean.toFixed(6);
                     }
+
+                    // only works because 2nd dim always same size
+                    var i = Math.floor(this.point.index / counts[0].length),
+                        j = this.point.index - (i * counts[0].length);
 
                     return '<b>X bin:</b> ' + xmin + ' to ' + xmax + '<br/>' +
                         '<b>Y bin:</b> ' + ymin + ' to ' + ymax + '<br/>' +
-                        '<b>Count:</b> ' + count;
+                        '<b>Mean:</b> ' + mean + '<br/>' +
+                        '<b>Std err:</b> ' + errors[i][j].toFixed(6) + '<br/>' +
+                        '<b>Count:</b> ' + counts[i][j];
                 }
             })()
         },
@@ -177,40 +199,26 @@ function loadIHistogram2D(obj) {
             }
         },
         series: [{
-            name: 'Counts',
-            data: counts,
+            name: 'Means',
+            data: means,
             type: 'heatmap'
         }]
     });
 
-    var ymean, ystd;
+    var zmean, zstd;
 
-    if (yAxisInfo.type == "datetime") {
-        var d = new Date(yAxisInfo.func(obj.yMean));
-        ymean = d.toUTCString();
-        ymean = ymean.slice(0, -17) + "<br/>" + ymean.slice(-17);
-        ystd = (yAxisInfo.func(obj.yMean + obj.yStd_dev) - yAxisInfo.func(obj.yMean)) / 1000 + " (s)";
+    zmean = +(obj.zMean.toFixed(6));
+
+    if (!isNaN(obj.zStd_dev) && isFinite(obj.zStd_dev)) {
+        zstd = +(obj.zStd_dev.toFixed(6));
     } else {
-        ymean = +(obj.yMean.toFixed(6));
-        ystd = +(obj.yStd_dev.toFixed(6));
+        zstd = obj.zStd_dev;
     }
 
-    var xmean, xstd;
-    if (xAxisInfo.type == "datetime") {
-        var d = new Date(xAxisInfo.func(obj.xMean));
-        xmean = d.toUTCString();
-        xmean = xmean.slice(0, -17) + "<br/>" + xmean.slice(-17);
-        xstd = (xAxisInfo.func(obj.xMean + obj.xStd_dev) - yAxisInfo.func(obj.xMean)) / 1000 + " (s)";
-    } else {
-        xmean = +(obj.xMean.toFixed(6));
-        xstd = +(obj.xStd_dev.toFixed(6));
-    }
 
     utils.chartbox(chart, "<b>Count:</b> " + obj.count + "<br/>" +
-        "<b>X mean:</b> " + xmean + "<br/>" +
-        "<b>X std dev:</b> " + xstd + "<br/>" +
-        "<b>Y mean:</b> " + ymean + "<br/>" +
-        "<b>Y std dev:</b> " + ystd);
+        "<b>Mean:</b> " + zmean + "<br/>" +
+        "<b>Std Dev:</b> " + zstd);
 }
 
-exports.twoDimensionalHisto = loadIHistogram2D;
+exports.twoDimensionalProfile = loadIProfile2D;
