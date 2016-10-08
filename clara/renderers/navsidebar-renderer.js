@@ -20,12 +20,13 @@ socket.on('message', function() {
                     button = document.createElement('button');
 
                 button.setAttribute('class', 'nav-button');
-                button.setAttribute('data-section', 'graphs');
                 button.setAttribute('id', 'button-graphs-' + filtered_service[0]);
                 button.setAttribute('type', 'button');
+                button.setAttribute('data-format', registration.description);
+                button.setAttribute('data-section', 'graphs');
                 button.appendChild(document.createTextNode(filtered_service[0]));
                 button.addEventListener('click', function() {
-                    ipcRenderer.send('config-service', registration.description, this.textContent);
+                    ipcRenderer.send('config-service', this.dataset.format, this.textContent);
                 });
                 div.appendChild(button);
                 services_set.add(filtered_service[0]);
