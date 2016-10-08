@@ -8,9 +8,19 @@ window.onerror = function(error, url, line) {
     ipcRenderer.send('errorInWindow', error);
 };
 
+function removeDemoNodes() {
+    var elements = document.getElementsByClassName('demo');
+    if (elements) {
+        while (elements.length > 0) {
+            elements[0].parentNode.removeChild(elements[0]);
+        }
+    }
+}
+
 function createDemoNodes(names) {
     var i;
     var section = document.getElementById('graphs-section');
+    removeDemoNodes();
     for (i = 0; i < names.length; i++) {
         var demoText = `
           <div class="demo">
@@ -28,7 +38,7 @@ function createDemoNodes(names) {
           </div>`;
         section.insertAdjacentHTML('beforeend', demoText);
     }
-    require('../../assets/js/demo-btns.js');
+    require('../../assets/js/demo-btns.js').addListeners();
 }
 
 
