@@ -12,8 +12,8 @@ var services_set = new Set();
 socket.on('message', function() {
     // message, sender, status, data[]
     for (i = 3; i < arguments.length; i++) {
-        var reg = new xMsgRegistration(arguments[i]),
-            filtered_service = reg.name.match(REGEX);
+        var registration = new xMsgRegistration(arguments[i]),
+            filtered_service = registration.name.match(REGEX);
         if (filtered_service) {
             if (!services_set.has(filtered_service[0])) {
                 var div = document.getElementById('nav-services'),
@@ -25,7 +25,7 @@ socket.on('message', function() {
                 button.setAttribute('type', 'button');
                 button.appendChild(document.createTextNode(filtered_service[0]));
                 button.addEventListener('click', function() {
-                    ipcRenderer.send('start-plotting', filtered_service[0]);
+                    ipcRenderer.send('config-service', registration.description);
                 });
                 div.appendChild(button);
                 services_set.add(filtered_service[0]);

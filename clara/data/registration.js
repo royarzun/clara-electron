@@ -10,7 +10,7 @@ class xMsgRegistration {
     return this.register.name;
   }
 
-  get decription() {
+  get description() {
     return this.register.description;
   }
 

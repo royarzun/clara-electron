@@ -3,15 +3,18 @@ const {
     BrowserWindow,
     ipcMain
 } = require('electron')
-var ipc = ipcMain;
 
 let mainWindow
 
-ipc.on('start-histogram', (event, args) => {
-  event.sender.send('new-histo-config', args)
-})
+ipcMain.on('config-service', (event, args) => {
+  event.sender.send('histogram-format', args)
+});
 
-ipc.on('logger', (event, args) => {
+ipcMain.on('errorInWindow', function(event, data) {
+    console.log(data);
+});
+
+ipcMain.on('logger', (event, args) => {
   console.log(args);
 });
 
@@ -31,8 +34,4 @@ app.on('ready', function() {
 
 app.on('closed', function() {
     app.quit();
-});
-
-ipc.on('errorInWindow', function(event, data) {
-    console.log(data);
 });
