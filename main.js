@@ -6,8 +6,8 @@ const {
 
 let mainWindow
 
-ipcMain.on('config-service', (event, args) => {
-  event.sender.send('histogram-format', args)
+ipcMain.on('config-service', (event, description, title) => {
+  event.sender.send('histogram-format', description, title);
 });
 
 ipcMain.on('errorInWindow', function(event, data) {

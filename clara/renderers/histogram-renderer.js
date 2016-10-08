@@ -17,8 +17,9 @@ function removeDemoNodes() {
     }
 }
 
-function createDemoNodes(names) {
+function createDemoNodes(title, names) {
     var i;
+    document.getElementById('graphs-title').innerHTML = title;
     var section = document.getElementById('graphs-section');
     removeDemoNodes();
     for (i = 0; i < names.length; i++) {
@@ -42,15 +43,15 @@ function createDemoNodes(names) {
 }
 
 
-ipcRenderer.on('histogram-format', (event, args) => {
+ipcRenderer.on('histogram-format', (event, description, title) => {
     //Load from clara/histogram-format the reader for the delivered data
     try {
-        histosFormat = require('../histogram-format/' + args);
+        histosFormat = require('../histogram-format/' + description);
     } catch (e) {
         // The next arg after format should the types of graphs to create
         // This should be an array, for now i just create a known array for the
         // NAIADS case.
-        createDemoNodes(['h1f', 'h2f', 'p1f', 'p2f']);
+        createDemoNodes(title, ['h1f', 'h2f', 'p1f', 'p2f']);
         createTriggers();
         // Default format for NOW is NAIADS
         histosFormat = require('../histogram-format/naiads');

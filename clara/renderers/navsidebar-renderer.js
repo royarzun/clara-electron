@@ -25,7 +25,7 @@ socket.on('message', function() {
                 button.setAttribute('type', 'button');
                 button.appendChild(document.createTextNode(filtered_service[0]));
                 button.addEventListener('click', function() {
-                    ipcRenderer.send('config-service', registration.description);
+                    ipcRenderer.send('config-service', registration.description, this.textContent);
                 });
                 div.appendChild(button);
                 services_set.add(filtered_service[0]);
