@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="assets/css/demo.css">
     <link rel="stylesheet" href="assets/css/github.css">
 
+    <link rel="import" href="sections/native-ui/index.html">
+    <link rel="import" href="sections/native-ui/create.html">
     <link rel="import" href="sections/native-ui/graphs.html">
 </head>
 
@@ -24,13 +26,27 @@
         <use xlink:href="assets/img/icons.svg#icon-electron"></use>
       </svg>
     </header>
-
-    <div id="nav-services" class="nav-item u-category-native-ui">
+    <div class="nav-item u-category-native-ui">
       <h5 class="nav-category">
-        <svg class="nav-icon">
-          <use xlink:href="assets/img/icons.svg#icon-native-ui"></use>
-        </svg>
-        Available Services</h5>
+        <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-menu"></use></svg>
+        Index
+      </h5>
+      <button type="button" id="button-menus" data-section="index" class="nav-button">About ClaRA</button>
+    </div>
+
+    <div class="nav-item u-category-native-ui" id="nav-services">
+      <h5 class="nav-category">
+        <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-windows"></use></svg>
+        Available Services
+      </h5>
+    </div>
+
+    <div class="nav-item u-category-native-ui">
+      <h5 class="nav-category">
+        <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
+        Applications
+      </h5>
+      <button type="button" id="button-windows" data-section="create" class="nav-button">Create and manage ClaRA applications</button>
     </div>
 
     <footer class="nav-footer">

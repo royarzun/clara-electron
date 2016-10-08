@@ -1,0 +1,23 @@
+as<template class="task-template">
+  <section id="create-section" class="section js-section u-category-native-ui">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
+          Create a ClaRA Application
+        </h1>
+        <h3>Graphical playground to create and deploy ClaRA applications, just drag and drop in the space...</h3>
+      </div>
+    </header>
+    <div class="demo-box">
+      <div class="demo-controls">
+        <button class="demo-button" id="process-crash">View Demo</button>
+      </div>
+      <p>In this demo we create a new window (via the <code>remote</code> module) and provide a link that will force a crash using <code>process.crash()</code>.</p>
+      <p>The window is listening for the crash event and when the event occurs it prompts the user with two options: reload or close.</p>
+
+      <h5>Renderer Process</h5>
+      <pre><code data-path="renderer-process/windows/process-crash.js"></pre></code>
+    </div>
+  </section>
+</template>
