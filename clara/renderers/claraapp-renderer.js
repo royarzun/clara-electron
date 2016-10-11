@@ -1,82 +1,147 @@
 const {ipcRenderer} = require('electron');
 var yaml = require('js-yaml'),
-    fs   = require('fs'),
+    fs = require('fs'),
     cytoscape = require('cytoscape'),
     cydagre = require('cytoscape-dagre'),
     dagre = require('dagre');
-
-// We should load the available services for deployment, we will do this by
-// reading a YAML file with the list of available services.
-var availableServices;
-
-try {
-  availableServices = yaml.safeLoad(fs.readFileSync('./assets/services.yml', 'utf8'));
-} catch (e) {
-  ipcRenderer.send('logger', e);
-}
 
 // Create the list of services, so the user could add this services nodes to the
 // chain composition.
 require('../../assets/js/demo-btns.js').addListeners();
 
 
-cydagre( cytoscape, dagre ); // register extension
+cydagre(cytoscape, dagre); // register extension
 
 var cy = cytoscape({
-	container: document.getElementById('cy'),
-  boxSelectionEnabled: false,
-  autounselectify: true,
-  zoomingEnabled: false,
-	layout: {
-		name: 'dagre'
-	},
+    container: document.getElementById('cy'),
+    panningEnabled: false,
+    zoomingEnabled: false,
+    layout: {
+        name: 'dagre'
+    },
 
-	style: [
-		{
-			selector: 'node',
-			style: {
-				'content': 'data(id)',
-				'text-opacity': 0.5,
-				'text-valign': 'center',
-				'text-halign': 'right',
-				'background-color': '#11479e'
-			}
-		},
+    style: [{
+            selector: 'node',
+            style: {
+                'content': 'data(id)',
+                'text-opacity': 0.5,
+                'text-valign': 'center',
+                'text-halign': 'right',
+                'width': 48,
+                'height': 48,
+                'background-color': '#11479e'
+            }
+        },
 
-		{
-			selector: 'edge',
-			style: {
-				'width': 4,
-				'target-arrow-shape': 'triangle',
-				'line-color': '#9dbaea',
-				'target-arrow-color': '#9dbaea',
-				'curve-style': 'bezier'
-			}
-		}
-	],
+        {
+            selector: 'edge',
+            style: {
+                'width': 4,
+                'target-arrow-shape': 'triangle',
+                'line-color': '#9dbaea',
+                'target-arrow-color': '#9dbaea',
+                'curve-style': 'bezier'
+            }
+        },
+        {
+            selector: ':selected',
+            style: {
+              'background-color': 'black',
+            }
+        },
+    ],
 
-	elements: {
-		nodes: [
-			{ data: { id: 'n0' } },
-			{ data: { id: 'n1' } },
-			{ data: { id: 'n2' } },
-			{ data: { id: 'n3' } },
-			{ data: { id: 'n4' } },
-			{ data: { id: 'n5' } },
-			{ data: { id: 'n6' } },
-			{ data: { id: 'n7' } },
-			{ data: { id: 'n8' } },
-			{ data: { id: 'n9' } }
-		],
-		edges: [
-			{ data: { source: 'n0', target: 'n1' } },
-			{ data: { source: 'n1', target: 'n2' } },
-			{ data: { source: 'n1', target: 'n3' } },
-			{ data: { source: 'n4', target: 'n5' } },
-			{ data: { source: 'n4', target: 'n6' } },
-			{ data: { source: 'n6', target: 'n7' } },
-			{ data: { source: 'n6', target: 'n8' } },
-			{ data: { source: 'n8', target: 'n9' } },
-		]
-	},
+    elements: {
+        nodes: [{
+            data: {
+                id: 'n4'
+            }
+        }, {
+            data: {
+                id: 'n5'
+            }
+        }, {
+            data: {
+                id: 'n6'
+            }
+        }, {
+            data: {
+                id: 'n7'
+            }
+        }, {
+            data: {
+                id: 'n8'
+            }
+        }, {
+            data: {
+                id: 'n9'
+            }
+        }],
+        edges: [{
+            data: {
+                source: 'n4',
+                target: 'n5'
+            }
+        }, {
+            data: {
+                source: 'n4',
+                target: 'n6'
+            }
+        }, {
+            data: {
+                source: 'n6',
+                target: 'n7'
+            }
+        }, {
+            data: {
+                source: 'n6',
+                target: 'n8'
+            }
+        }, {
+            data: {
+                source: 'n8',
+                target: 'n9'
+            }
+        }, ]
+    },
 });
+
+var eles = cy.nodes();
+eles.on('click', function(event) {
+    ipcRenderer.send('logger', event.cyTarget.id());
+    this.select();
+});
+cy.on('click', 'edges', { foo: 'bar' }, function(evt){
+  ipcRenderer.send('logger', evt.data.foo);
+});
+
+
+// We should load the available services for deployment, we will do this by
+// reading a YAML file with the list of available services.
+var availableServices;
+let nodes = new Set();
+
+try {
+    availableServices = yaml.safeLoad(fs.readFileSync('./assets/services.yml', 'utf8')).services;
+    for (var i = 0; i < availableServices.length; i++) {
+        var ul = document.getElementById('node-list'),
+            li = document.createElement('li');
+        li.appendChild(document.createTextNode(availableServices[i].name));
+        li.setAttribute("id", availableServices[i].name);
+        li.setAttribute("data-classpath", availableServices[i].class)
+        li.addEventListener('click', function() {
+          if (!nodes.has(this.id)){
+            cy.add({
+              group: "nodes",
+              data: { id: this.id, classpath: this.dataset.class },
+              position: { x: 200, y: 200 }
+            });
+            nodes[this.id] = this.id;
+          }
+        });
+        ul.appendChild(li);
+    }
+
+} catch (e) {
+    ipcRenderer.send('logger', e);
+}
