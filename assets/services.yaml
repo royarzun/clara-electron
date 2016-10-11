@@ -1,0 +1,8 @@
+---
+- services:
+  - name: E1
+    class: org.jlab.clara.examples.engines.E1
+  - name: E2
+    class: org.jlab.clara.examples.engines.E2
+  - name: E5
+    class: org.jlab.clara.examples.engines.E5
