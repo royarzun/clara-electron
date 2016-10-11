@@ -1,4 +1,4 @@
-as<template class="task-template">
+<template class="task-template">
   <section id="create-section" class="section js-section u-category-native-ui">
     <header class="section-header">
       <div class="section-wrapper">
@@ -7,17 +7,16 @@ as<template class="task-template">
           Create a ClaRA Application
         </h1>
         <h3>Graphical playground to create and deploy ClaRA applications, just drag and drop in the space...</h3>
+        <div class="demo">
+          <div class="demo-wrapper">
+            <button id="open-file-demo-toggle" class="demo-toggle-button">Create an app
+              <div class="demo-meta u-avoid-clicks">Cytoscape.js</div>
+            </button>
+          </div>
+        </div>
+<div id="cy" style="height:500px;"></div>
       </div>
     </header>
-    <div class="demo-box">
-      <div class="demo-controls">
-        <button class="demo-button" id="process-crash">View Demo</button>
-      </div>
-      <p>In this demo we create a new window (via the <code>remote</code> module) and provide a link that will force a crash using <code>process.crash()</code>.</p>
-      <p>The window is listening for the crash event and when the event occurs it prompts the user with two options: reload or close.</p>
 
-      <h5>Renderer Process</h5>
-      <pre><code data-path="renderer-process/windows/process-crash.js"></pre></code>
-    </div>
   </section>
 </template>
