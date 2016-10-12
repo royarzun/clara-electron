@@ -43,10 +43,11 @@ var cy = cytoscape({
                 'curve-style': 'bezier'
             }
         },
+
         {
             selector: ':selected',
             style: {
-              'background-color': 'black',
+                'background-color': 'black',
             }
         },
     ],
@@ -106,14 +107,21 @@ var cy = cytoscape({
     },
 });
 
-var eles = cy.nodes();
-eles.on('click', function(event) {
-    ipcRenderer.send('logger', event.cyTarget.id());
+cy.nodes().on('click', function(event) {
     this.select();
 });
-cy.on('click', 'edges', { foo: 'bar' }, function(evt){
-  ipcRenderer.send('logger', evt.data.foo);
+
+cy.nodes().on('cxttapstart', function(event) {
+    ipcRenderer.send('logger', 'here i will launch the modal');
 });
+
+document.addEventListener('keydown', function(event) {
+    ipcRenderer.send('logger', 'deleting a node...');
+    if (event.key == "Backspace") {
+        cy.$(':selected').remove();
+    }
+});
+
 
 
 // We should load the available services for deployment, we will do this by
@@ -130,14 +138,20 @@ try {
         li.setAttribute("id", availableServices[i].name);
         li.setAttribute("data-classpath", availableServices[i].class)
         li.addEventListener('click', function() {
-          if (!nodes.has(this.id)){
-            cy.add({
-              group: "nodes",
-              data: { id: this.id, classpath: this.dataset.class },
-              position: { x: 200, y: 200 }
-            });
-            nodes[this.id] = this.id;
-          }
+            if (!nodes.has(this.id)) {
+                cy.add({
+                    group: "nodes",
+                    data: {
+                        id: this.id,
+                        classpath: this.dataset.class
+                    },
+                    position: {
+                        x: 200,
+                        y: 200
+                    }
+                });
+                nodes[this.id] = this.id;
+            }
         });
         ul.appendChild(li);
     }
