@@ -106,9 +106,47 @@ var cy = cytoscape({
         }, ]
     },
 });
+var lastSelection;
+var ctrlPressed = false;
+
+function printOutput(text){
+  var p = document.getElementById('output');
+  p.innerHTML = text;
+}
+function clearOutput(){
+  var p = document.getElementById('output');
+  p.innerHTML = "";
+}
 
 cy.nodes().on('click', function(event) {
-    this.select();
+    if (ctrlPressed) {
+      // if one node is selected we will connect to the next one clicked
+      // try to connect
+      ipcRenderer.send('logger', 'adding edge...(' + lastSelection + ', ' + this.id() + ')');
+
+      if (lastSelection == this.id() ){
+        clearOutput();
+        ctrlPressed = false;
+        lastSelection = this.id();
+        return;
+      }
+      cy.add({
+        group: 'edges',
+        data: {
+          source: lastSelection,
+          target: this.id()
+        }
+      });
+      ctrlPressed = false;
+      clearOutput();
+      lastSelection = this.id();
+    } else {
+      this.select();
+      ctrlPressed = false;
+      clearOutput();
+      lastSelection = this.id();
+    }
+
 });
 
 cy.nodes().on('cxttapstart', function(event) {
@@ -116,13 +154,23 @@ cy.nodes().on('cxttapstart', function(event) {
 });
 
 document.addEventListener('keydown', function(event) {
-    ipcRenderer.send('logger', 'deleting a node...');
-    if (event.key == "Backspace") {
-        cy.$(':selected').remove();
+    var node = cy.$(':selected');
+    if (!node.id()) return;
+
+    switch (event.key) {
+      case "Backspace":
+        ipcRenderer.send('logger', 'deleting: ' + node.id());
+        node.remove();
+        break;
+      case "c":
+        ipcRenderer.send('logger', 'ready to connect: ' + node.id());
+        printOutput('ready to connect...')
+        ctrlPressed = true
+        break;
+      default:
+        break;
     }
 });
-
-
 
 // We should load the available services for deployment, we will do this by
 // reading a YAML file with the list of available services.
