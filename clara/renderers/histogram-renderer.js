@@ -1,8 +1,9 @@
-const {
-    ipcRenderer
-} = require('electron');
+const {ipcRenderer} = require('electron');
 var cp = require('child_process');
+var child;
 var histosFormat;
+var serviceName;
+var messagePusher;
 
 window.onerror = function(error, url, line) {
     ipcRenderer.send('errorInWindow', error);
@@ -20,28 +21,27 @@ function removeDemoNodes() {
 function createDemoNodes(title, names) {
     var i;
     document.getElementById('graphs-title').innerHTML = title;
-    var section = document.getElementById('graphs-section');
+    serviceName = title;
+    var section = document.getElementById('graphs-section')
     removeDemoNodes();
     for (i = 0; i < names.length; i++) {
         var demoText = `
           <div class="demo">
-            <div class="demo-wrapper">
-              <button id="open-file-demo-toggle" class="js-container-target demo-toggle-button">` + names[i] + `
-                <div class="demo-meta u-avoid-clicks">HighCharts.js</div>
-              </button>
-              <div class="demo-box">
-                <div class="demo-controls">
-                  <button class="demo-button trigger" id="` + names[i] + `-button">Start</button>
-                </div>
-                <div id="` + names[i] + `-graph"></div>
-              </div>
-            </div>
+            <div id="` + names[i] + `-graph" data-servicename="` + serviceName +`"></div>
           </div>`;
         section.insertAdjacentHTML('beforeend', demoText);
     }
-    require('../../assets/js/demo-btns.js').addListeners();
+
+    child = cp.fork('./clara/renderers/subscriber-renderer', [serviceName]);
+    var messagePusher = setInterval(function () {
+        child.send("send_data")}, 5000);
+    child.on('message', function (args) {
+        ipcRenderer.send('logger', args);
+        histosFormat.draw(args);
+    });
 }
 
+let subscribers = []
 
 ipcRenderer.on('histogram-format', (event, description, title) => {
     //Load from clara/histogram-format the reader for the delivered data
@@ -51,38 +51,9 @@ ipcRenderer.on('histogram-format', (event, description, title) => {
         // The next arg after format should the types of graphs to create
         // This should be an array, for now i just create a known array for the
         // NAIADS case.
-        createDemoNodes(title, ['h1f', 'h2f', 'p1f', 'p2f']);
-        createTriggers();
+
         // Default format for NOW is NAIADS
         histosFormat = require('../histogram-format/naiads');
+        createDemoNodes(title, ['h1f', 'h2f', 'p1f', 'p2f']);
     }
-});
-
-function createTriggers() {
-    var subscribers = []
-        // Find all buttons that were created in the step before:
-    for (elementId in document.getElementsByClassName('trigger')) {
-        var element = document.getElementById(elementId);
-        if (element) {
-            element.addEventListener('click', function() {
-                var id = this.id.replace('-button', '');
-                if (this.textContent == "Start") {
-                    subscribers[id] = setInterval(function() {
-                        child.send(id);
-                    }, 5000);
-                    this.textContent = "Stop";
-                } else {
-                    this.textContent = "Start";
-                    clearInterval(subscribers[id]);
-                }
-            });
-        }
-    }
-}
-
-
-var child = cp.fork('./clara/renderers/subscriber-renderer');
-child.on('message', function(args) {
-    // here i receive the data for the plot
-    histosFormat.draw(args);
 });
