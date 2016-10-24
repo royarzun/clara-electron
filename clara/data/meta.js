@@ -17,11 +17,7 @@ class xMsgMeta {
   get mimetype() {
     return this.meta.dataType;
   }
-
-
 }
 
 exports.xMsgMeta = xMsgMeta;
-// Usage from outside:
-// var meta = require('./data/meta.js');
-// var xmsgmeta = new meta.xMsgMeta(metadata);
+exports.xMsgMetaBuilder = xMsgMetaBuilder;
