@@ -19,29 +19,38 @@ function removeDemoNodes() {
 }
 
 function createDemoNodes(title, names) {
-    var i;
     document.getElementById('graphs-title').innerHTML = title;
     serviceName = title;
     var section = document.getElementById('graphs-section')
+    var i;
     removeDemoNodes();
     for (i = 0; i < names.length; i++) {
         var demoText = `
           <div class="demo">
-            <div id="` + names[i] + `-graph" data-servicename="` + serviceName +`"></div>
+            <div id="` + names[i] + `-graph" data-servicename="` + serviceName + `"></div>
           </div>`;
         section.insertAdjacentHTML('beforeend', demoText);
     }
 
-    child = cp.fork('./clara/renderers/subscriber-renderer', [serviceName]);
-    var messagePusher = setInterval(function () {
-        child.send("send_data")}, 5000);
+    child = cp.fork('./clara/processes/subscriber-process.js', [serviceName]);
+    messagePusher = setInterval(function() {
+        child.send('feed')
+    }, 5000);
+
     child.on('message', function (args) {
-        ipcRenderer.send('logger', args);
-        histosFormat.draw(args);
+      for (var i=0; i < args.length; i++){
+        try{
+          var object = JSON.parse(String(args[i]));
+          if (object) {
+            histosFormat.draw(object.p2f);
+          }
+        } catch(e) {
+          ipcRenderer.send('logger', e);
+        }
+      }
     });
 }
 
-let subscribers = []
 
 ipcRenderer.on('histogram-format', (event, description, title) => {
     //Load from clara/histogram-format the reader for the delivered data
