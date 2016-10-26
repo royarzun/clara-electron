@@ -16,6 +16,9 @@ subcription.subscribe(function(topic, meta, msgData) {
     var metadata = new xMsgMeta(meta);
     var serializedData = new xMsgData(msgData);
     try{
+      // TODO: Since we are using NAIADS as test case, im just catching messages
+      // with ARRAY of STRINGS, because i know its here where the stats are coming
+      // from, for real case mimetype should be provided from metadata. 
       data = serializedData.STRINGA;
     } catch (e) {
       console.log(e);
