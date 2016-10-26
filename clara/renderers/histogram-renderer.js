@@ -38,12 +38,7 @@ function createDemoNodes(title, names) {
     }, 5000);
 
     child.on('message', function(args) {
-        for (var i = 0; i < args.length; i++) {
-              if (args[i]) {
-                var object = JSON.parse(String(args[i]));
-                histosFormat.draw(args[i]);
-          }
-        }
+        histosFormat.draw(args);
     });
 }
 
