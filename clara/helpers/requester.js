@@ -1,5 +1,5 @@
 
-class requester {
+class Requester {
 
     constructor() {
         this.sock = require('zmq').socket('pub');
