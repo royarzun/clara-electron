@@ -37,17 +37,13 @@ function createDemoNodes(title, names) {
         child.send('feed')
     }, 5000);
 
-    child.on('message', function (args) {
-      for (var i=0; i < args.length; i++){
-        try{
-          var object = JSON.parse(String(args[i]));
-          if (object) {
-            histosFormat.draw(object.p2f);
+    child.on('message', function(args) {
+        for (var i = 0; i < args.length; i++) {
+              if (args[i]) {
+                var object = JSON.parse(String(args[i]));
+                histosFormat.draw(args[i]);
           }
-        } catch(e) {
-          ipcRenderer.send('logger', e);
         }
-      }
     });
 }
 
@@ -60,7 +56,6 @@ ipcRenderer.on('histogram-format', (event, description, title) => {
         // The next arg after format should the types of graphs to create
         // This should be an array, for now i just create a known array for the
         // NAIADS case.
-
         // Default format for NOW is NAIADS
         histosFormat = require('../histogram-format/naiads');
         createDemoNodes(title, ['h1f', 'h2f', 'p1f', 'p2f']);

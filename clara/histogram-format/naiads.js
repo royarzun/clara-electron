@@ -1,9 +1,8 @@
-
-function draw(dataObject) {
-  if (dataObject.h1f) require('./naiads_modules/1_d_histogram').oneDimensionalHisto(dataObject.h1f);
-  if (dataObject.h2f) require('./naiads_modules/2_d_histogram').twoDimensionalHisto(dataObject.h2f);
-  if (dataObject.p1f) require('./naiads_modules/1_d_profile').oneDimensionalProfile(dataObject.p1f);
-  if (dataObject.p2f) require('./naiads_modules/2_d_profile').twoDimensionalProfile(dataObject.p2f);
+function draw(tObject) {
+    if ('h1f' in tObject) require('./naiads_modules/1_d_histogram').oneDimensionalHisto(tObject.h1f);
+    if ('h2f' in tObject) require('./naiads_modules/2_d_histogram').twoDimensionalHisto(tObject.h2f);
+    if ('p1f' in tObject) require('./naiads_modules/1_d_profile').oneDimensionalProfile(tObject.p1f);
+    if ('p2f' in tObject) require('./naiads_modules/2_d_profile').twoDimensionalProfile(tObject.p2f);
 }
 
 exports.draw = draw;
