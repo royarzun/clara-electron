@@ -12,4 +12,4 @@ class Requester {
     }
 }
 
-exports.requester = requester;
+exports.Requester = Requester;
