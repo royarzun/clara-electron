@@ -158,8 +158,8 @@ function loadIProfile2D(obj) {
                         d = new Date(xmax);
                         xmax = d.toUTCString();
                     } else {
-                        xmin = +xmin.toFixed(6);
-                        xmax = +xmax.toFixed(6);
+                        xmin = +utils.formatNumeric(xmin, 6);
+                        xmax = +utils.formatNumeric(xmax, 6);
                     }
 
                     if (isydate) {
@@ -168,15 +168,15 @@ function loadIProfile2D(obj) {
                         d = new Date(ymax);
                         ymax = d.toUTCString();
                     } else {
-                        ymin = +ymin.toFixed(6);
-                        ymax = +ymax.toFixed(6);
+                        ymin = +utils.formatNumeric(ymin, 6);
+                        ymax = +utils.formatNumeric(ymax, 6);
                     }
 
                     var mean = this.point.value;
                     if (mean == null) {
                         mean = "N/A";
                     } else {
-                        mean = mean.toFixed(6);
+                        mean = utils.formatNumeric(mean, 6);
                     }
 
                     // only works because 2nd dim always same size
@@ -186,7 +186,7 @@ function loadIProfile2D(obj) {
                     return '<b>X bin:</b> ' + xmin + ' to ' + xmax + '<br/>' +
                         '<b>Y bin:</b> ' + ymin + ' to ' + ymax + '<br/>' +
                         '<b>Mean:</b> ' + mean + '<br/>' +
-                        '<b>Std err:</b> ' + errors[i][j].toFixed(6) + '<br/>' +
+                        '<b>Std err:</b> ' + utils.formatNumeric(errors[i][j], 6) + '<br/>' +
                         '<b>Count:</b> ' + counts[i][j];
                 }
             })()
@@ -207,14 +207,13 @@ function loadIProfile2D(obj) {
 
     var zmean, zstd;
 
-    zmean = +(obj.zMean.toFixed(6));
+    zmean = +(utils.formatNumeric(obj.zMean, 6));
 
     if (!isNaN(obj.zStd_dev) && isFinite(obj.zStd_dev)) {
-        zstd = +(obj.zStd_dev.toFixed(6));
+        zstd = +(utils.formatNumeric(obj.zStd_dev, 6));
     } else {
         zstd = obj.zStd_dev;
     }
-
 
     utils.chartbox(chart, "<b>Count:</b> " + obj.count + "<br/>" +
         "<b>Mean:</b> " + zmean + "<br/>" +

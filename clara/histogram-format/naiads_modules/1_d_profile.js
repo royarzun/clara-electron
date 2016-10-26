@@ -103,8 +103,8 @@ function loadProfile1D(obj) {
                         d = new Date(max);
                         max = d.toUTCString();
                     } else {
-                        min = +min.toFixed(6);
-                        max = +max.toFixed(6);
+                        min = +utils.formatNumeric(min, 6);
+                        max = +utils.formatNumeric(max, 6);
                     }
 
                     var mean = this.points[0].y;
@@ -175,9 +175,9 @@ function loadProfile1D(obj) {
         mean = mean.slice(0, -17) + "<br/>" + mean.slice(-17);
         std = (yAxisInfo.func(obj.mean + obj.std_dev) - yAxisInfo.func(obj.mean)) / 1000 + " (s)";
     } else {
-        mean = +(obj.mean.toFixed(6));
+        mean = +(utils.formatNumeric(obj.mean, 6));
         if (!isNaN(obj.std_dev)) {
-            std = +(obj.std_dev.toFixed(6));
+            std = +(utils.formatNumeric(obj.std_dev, 6));
         }
     }
 

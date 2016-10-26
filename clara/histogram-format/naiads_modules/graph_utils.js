@@ -47,6 +47,22 @@ function getAxisInfo(units, func, type) {
     }
 }
 
+function formatNumeric(n, p) {
+
+    if (n == null) {
+        return "N/A";
+    }
+
+    if (isNumeric(n)) {
+        return +(n.toFixed(p))
+    }
+    return n
+}
+
+function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
 function jq(myid) {
     return "C" + myid.replace(/\(|\)|:|\.|\[|\]|,|\/| |=/g, '');
 }
@@ -96,6 +112,7 @@ function yymmddToUTC(yymmdd) {
 
 
 exports.chartbox = chartbox;
+exports.formatNumeric = formatNumeric;
 exports.getAxisInfo = getAxisInfo;
 exports.iecToUNIX = iecToUNIX;
 exports.iecToUTC = iecToUTC;

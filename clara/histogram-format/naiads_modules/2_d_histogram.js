@@ -144,8 +144,8 @@ function loadHistogram2D(obj) {
                         d = new Date(xmax);
                         xmax = d.toUTCString();
                     } else {
-                        xmin = +xmin.toFixed(6);
-                        xmax = +xmax.toFixed(6);
+                        xmin = +utils.formatNumeric(xmin, 6);
+                        xmax = +utils.formatNumeric(xmax, 6);
                     }
 
                     if (isydate) {
@@ -154,8 +154,8 @@ function loadHistogram2D(obj) {
                         d = new Date(ymax);
                         ymax = d.toUTCString();
                     } else {
-                        ymin = +ymin.toFixed(6);
-                        ymax = +ymax.toFixed(6);
+                        ymin = +utils.formatNumeric(ymin, 6);
+                        ymax = +utils.formatNumeric(ymax, 6);
                     }
 
                     var count = this.point.value;
@@ -191,8 +191,8 @@ function loadHistogram2D(obj) {
         ymean = ymean.slice(0, -17) + "<br/>" + ymean.slice(-17);
         ystd = (yAxisInfo.func(obj.yMean + obj.yStd_dev) - yAxisInfo.func(obj.yMean)) / 1000 + " (s)";
     } else {
-        ymean = +(obj.yMean.toFixed(6));
-        ystd = +(obj.yStd_dev.toFixed(6));
+        ymean = +(utils.formatNumeric(obj.yMean, 6));
+        ystd = +(utils.formatNumeric(obj.yStd_dev, 6));
     }
 
     var xmean, xstd;
@@ -202,8 +202,8 @@ function loadHistogram2D(obj) {
         xmean = xmean.slice(0, -17) + "<br/>" + xmean.slice(-17);
         xstd = (xAxisInfo.func(obj.xMean + obj.xStd_dev) - yAxisInfo.func(obj.xMean)) / 1000 + " (s)";
     } else {
-        xmean = +(obj.xMean.toFixed(6));
-        xstd = +(obj.xStd_dev.toFixed(6));
+        xmean = +(utils.formatNumeric(obj.xMean, 6));
+        xstd = +(utils.formatNumeric(obj.xStd_dev, 6));
     }
 
     utils.chartbox(chart, "<b>Count:</b> " + obj.count + "<br/>" +
