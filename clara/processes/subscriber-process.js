@@ -1,5 +1,5 @@
-var Subscriber = require('../helpers/subscriber').Subscriber;
-const {requester} = require('../helpers/requester.js');
+const {Subscriber} = require('../helpers/subscriber.js');
+const {Requester} = require('../helpers/requester.js');
 const {xMsgData} = require('../data/data.js');
 const {xMsgMeta} = require('../data/meta.js');
 
@@ -12,8 +12,9 @@ var data = {},
 req.send(require('../data/request.js').createRequest(topic, 'serviceReportData?1'));
 
 subcription.subscribe(function(topic, meta, msgData) {
-    var metadata = new xMsgMeta(meta);
-    var serializedData = new xMsgData(msgData);
+    var metadata = new xMsgMeta(meta),
+        serializedData = new xMsgData(msgData);
+
     try{
       // TODO: Since we are using NAIADS as test case, im just catching messages
       // with ARRAY of STRINGS, because i know its here where the stats are coming
@@ -24,6 +25,10 @@ subcription.subscribe(function(topic, meta, msgData) {
     }
 });
 
-process.on('message', function() {
+process.on('message', function () {
     process.send(data);
+});
+
+process.on('exit', function () {
+    subscription.unsubscribe();
 });

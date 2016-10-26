@@ -1,7 +1,7 @@
 const REGEX = /([^:_%]+(%([\d]+))?_(java|python|cpp)):\w+:\w+$/g;
 const ALL_SERVICES_MSG = ['allSubscriber', 'probeService', 'allSubscriber'];
 
-const xMsgRegistration = require('../data/registration.js').xMsgRegistration;
+const {xMsgRegistration} = require('../data/registration.js');
 
 var {ipcRenderer} = require('electron');
 var myip = require('quick-local-ip');
