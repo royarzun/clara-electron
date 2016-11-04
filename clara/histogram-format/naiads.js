@@ -12,3 +12,4 @@ function draw(tObject) {
 
 exports.draw = draw;
 exports.dataObjects = ['h1f', 'h2f', 'p1f', 'p2f'];
+exports.dataType = "binary/array-string";

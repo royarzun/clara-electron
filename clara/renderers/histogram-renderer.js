@@ -3,6 +3,7 @@ var utils = require('./utils.js');
 var cp = require('child_process');
 var subscriberProcess;
 var messagePusher;
+let histosFormat;
 
 window.onerror = function(error, url, line) {
     ipcRenderer.send('errorInWindow', error);
@@ -11,7 +12,7 @@ window.onerror = function(error, url, line) {
 ipcRenderer.on('histogram-format', (event, description, title) => {
     //Load from clara/histogram-format the reader for the delivered data
     try {
-        var histosFormat = require('../histogram-format/' + description);
+        histosFormat = require('../histogram-format/' + description);
     } catch (e) {
         // The next arg after format should the types of graphs to create
         // This should be an array, for now i just create a known array for the
@@ -19,8 +20,8 @@ ipcRenderer.on('histogram-format', (event, description, title) => {
         // Default format for NOW is NAIADS
         histosFormat = require('../histogram-format/naiads.js');
     }
-    utils.createNodes(title, histosFormat.dataObjects, function () {
-        subscriberProcess = cp.fork('./clara/processes/subscriber-process.js', [title]);
+    utils.createNodes(title, histosFormat.dataObjects, function() {
+        subscriberProcess = cp.fork('./clara/processes/subscriber-process.js', [title, histosFormat.dataType]);
         messagePusher = setInterval(function() {
             subscriberProcess.send('feed')
         }, 5000);

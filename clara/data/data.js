@@ -53,6 +53,37 @@ class xMsgData {
   get STRINGA() {
     return this.data.STRINGA;
   }
+
+  fromDataType(dataType) {
+    switch (dataType) {
+      case "binary/sint32":
+        return this.FLSINT32;
+      case "binary/array-sint32":
+        return this.FLSINT32A;
+      case "binary/sint64":
+        return this.FLSINT64;
+      case "binary/array-sint64":
+        return this.FLSINT64A;
+      case "binary/float":
+        return this.FLOAT;
+      case "binary/array-float":
+        return this.FLOATA;
+      case "binary/double":
+        return this.DOUBLE;
+      case "binary/array-double":
+        return this.DOUBLEA;
+      case "text/string":
+        return this.STRING;
+      case "binary/array-string":
+        return this.STRINGA;
+      case "binary/bytes":
+        return this.BYTES;
+      case "binary/array-bytes":
+        return this.BYTESA;
+      default:
+        return null;
+    }
+  }
 }
 
 exports.xMsgData = xMsgData;

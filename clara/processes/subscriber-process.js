@@ -5,6 +5,8 @@ const {xMsgMeta} = require('../data/meta.js');
 
 
 let topic = process.argv[2].toString('utf8');
+let dataType = process.argv[3].toString('utf8');
+
 var data = {},
     subcription = new Subscriber('data:' + topic),
     req = new Requester();
@@ -16,10 +18,10 @@ subcription.subscribe(function(topic, meta, msgData) {
         serializedData = new xMsgData(msgData);
 
     try{
-      // TODO: Since we are using NAIADS as test case, im just catching messages
-      // with ARRAY of STRINGS, because i know its here where the stats are coming
-      // from, for real case mimetype should be provided from metadata.
-      data = serializedData.STRINGA;
+      var deserializedData = serializedData.fromDataType(dataType);
+      if (deserializedData) {
+        data = deserializedData;
+      }
     } catch (e) {
       console.log(e);
     }
