@@ -2,11 +2,10 @@ const REGEX = /([^:_%]+(%([\d]+))?_(java|python|cpp)):\w+:\w+$/g;
 const ALL_SERVICES_MSG = ['allSubscriber', 'probeService', 'allSubscriber'];
 
 const {xMsgRegistration} = require('../data/registration.js');
+const {ipcRenderer} = require('electron');
+const socket = require('zmq').socket('req');
 
-var {ipcRenderer} = require('electron');
 var myip = require('quick-local-ip');
-var socket = require('zmq').socket('req');
-
 var services_set = new Set();
 
 socket.on('message', function() {
@@ -35,7 +34,7 @@ socket.on('message', function() {
     }
 });
 
-socket.connect('tcp://' + myip.getLocalIP4() + ':8888');
+socket.connect('tcp://' + myip.getLocalIP4() + ':7775');
 
 setInterval(function() {
     socket.send(ALL_SERVICES_MSG);
