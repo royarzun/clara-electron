@@ -7,6 +7,8 @@ const socket = require('zmq').socket('req');
 
 var myip = require('quick-local-ip');
 var services_set = new Set();
+var probServices = require('./utils.js').probServices;
+
 
 socket.on('message', function() {
     // message, sender, status, data[]

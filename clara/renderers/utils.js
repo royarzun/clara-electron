@@ -21,5 +21,19 @@ function createNodes(title, names, processFunction) {
     processFunction(title);
 }
 
+function getProbableServicesList() {
+    yaml = require('js-yaml');
+    fs = require('fs');
+    // Get document, or throw exception on error
+    try {
+        console.log(__dirname)
+        var doc = yaml.safeLoad(fs.readFileSync(__dirname + '/../../info/services.yml', 'utf8'));
+        return doc.services;
+    } catch (e) {
+        console.log(e);
+        return e
+    }
+}
 
+exports.probServices = getProbableServicesList();
 exports.createNodes = createNodes;
