@@ -35,5 +35,10 @@ function getProbableServicesList() {
     }
 }
 
+function getLocalRegistrarAddress() {
+    var myip = require('quick-local-ip');
+    return 'tcp://' + myip.getLocalIP4() + ':7775';
+}
+
 exports.probServices = getProbableServicesList();
 exports.createNodes = createNodes;

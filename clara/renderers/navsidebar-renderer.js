@@ -6,7 +6,6 @@ const {ipcRenderer} = require('electron');
 const socket = require('zmq').socket('req');
 const probServices = require('./utils.js').probServices;
 
-var myip = require('quick-local-ip');
 var services_set = new Set();
 
 
@@ -46,7 +45,7 @@ function __isProbable(serviceToCheck) {
     return false;
 }
 
-socket.connect('tcp://' + myip.getLocalIP4() + ':7775');
+socket.connect(require('./utils.js').getLocalRegistrarAddress());
 
 setInterval(function() {
     socket.send(ALL_SERVICES_MSG);
