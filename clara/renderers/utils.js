@@ -40,5 +40,6 @@ function getLocalRegistrarAddress() {
     return 'tcp://' + myip.getLocalIP4() + ':7775';
 }
 
+exports.getLocalRegistrarAddress = getLocalRegistrarAddress();
 exports.probServices = getProbableServicesList();
 exports.createNodes = createNodes;
