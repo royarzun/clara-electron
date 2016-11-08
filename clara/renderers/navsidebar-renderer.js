@@ -4,10 +4,10 @@ const ALL_SERVICES_MSG = ['allSubscriber', 'probeService', 'allSubscriber'];
 const {xMsgRegistration} = require('../data/registration.js');
 const {ipcRenderer} = require('electron');
 const socket = require('zmq').socket('req');
+const probServices = require('./utils.js').probServices;
 
 var myip = require('quick-local-ip');
 var services_set = new Set();
-var probServices = require('./utils.js').probServices;
 
 
 socket.on('message', function() {
@@ -16,7 +16,7 @@ socket.on('message', function() {
         var registration = new xMsgRegistration(arguments[i]),
             filtered_service = registration.name.match(REGEX);
         if (filtered_service) {
-            if (!services_set.has(filtered_service[0])) {
+            if (!services_set.has(filtered_service[0]) && __isProbable(filtered_service[0])) {
                 var div = document.getElementById('nav-services'),
                     button = document.createElement('button');
 
@@ -35,6 +35,17 @@ socket.on('message', function() {
         }
     }
 });
+
+function __isProbable(serviceToCheck) {
+    ipcRenderer.send('logger', 'input : ' + serviceToCheck)
+    var S = require('string');
+    for (var i = 0; i < probServices.length; i++) {
+        if (S(serviceToCheck).endsWith(':' + probServices[i])) {
+            return true;
+        }
+    }
+    return false;
+}
 
 socket.connect('tcp://' + myip.getLocalIP4() + ':7775');
 
