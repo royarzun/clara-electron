@@ -12,7 +12,7 @@ var services_set = new Set();
 
 socket.on('message', function() {
     // message, sender, status, data[]
-    for (i = 3; i < arguments.length; i++) {
+    for (var i = 3; i < arguments.length; i++) {
         var registration = new xMsgRegistration(arguments[i]),
             filtered_service = registration.name.match(REGEX);
         if (filtered_service) {
@@ -37,7 +37,6 @@ socket.on('message', function() {
 });
 
 function __isProbable(serviceToCheck) {
-    ipcRenderer.send('logger', 'input : ' + serviceToCheck)
     var S = require('string');
     for (var i = 0; i < probServices.length; i++) {
         if (S(serviceToCheck).endsWith(':' + probServices[i])) {
