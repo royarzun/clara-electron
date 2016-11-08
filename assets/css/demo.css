@@ -144,6 +144,19 @@
   color: inherit;
   background-color: transparent;
 }
+
+demo-button-small {
+  align-self: flex-start;
+  margin-right: 1em;
+  border: 2px solid;
+  border-radius: 4px;
+  font: inherit;
+  font-size: 0.8em;
+  padding: .4em 1.2em;
+  color: inherit;
+  background-color: transparent;
+}
+
 .demo-button:focus {
   outline: none;
   background-color: white;
@@ -202,4 +215,3 @@
 .demo-protip strong {
   font-weight: 600;
 }
-

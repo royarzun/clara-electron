@@ -1,9 +1,16 @@
+const REGEX = /([^:_%]+(%([\d]+))?_(java|python|cpp)):\w+:\w+$/g;
+const ALL_SERVICES_MSG = ['allSubscriber', 'probeService', 'allSubscriber'];
+
+const {xMsgRegistration} = require('../data/registration.js');
 const {ipcRenderer} = require('electron');
+const socket = require('zmq').socket('req');
+
 var yaml = require('js-yaml'),
     fs = require('fs'),
     cytoscape = require('cytoscape'),
     cydagre = require('cytoscape-dagre'),
-    dagre = require('dagre');
+    dagre = require('dagre'),
+    services_set = new Set();
 
 // Create the list of services, so the user could add this services nodes to the
 // chain composition.
@@ -53,60 +60,12 @@ var cy = cytoscape({
     ],
 
     elements: {
-        nodes: [{
-            data: {
-                id: 'n4'
-            }
-        }, {
-            data: {
-                id: 'n5'
-            }
-        }, {
-            data: {
-                id: 'n6'
-            }
-        }, {
-            data: {
-                id: 'n7'
-            }
-        }, {
-            data: {
-                id: 'n8'
-            }
-        }, {
-            data: {
-                id: 'n9'
-            }
-        }],
-        edges: [{
-            data: {
-                source: 'n4',
-                target: 'n5'
-            }
-        }, {
-            data: {
-                source: 'n4',
-                target: 'n6'
-            }
-        }, {
-            data: {
-                source: 'n6',
-                target: 'n7'
-            }
-        }, {
-            data: {
-                source: 'n6',
-                target: 'n8'
-            }
-        }, {
-            data: {
-                source: 'n8',
-                target: 'n9'
-            }
-        }, ]
+        nodes: [],
+        edges: []
     },
 });
 var lastSelection;
+let nodes = new Set();
 var ctrlPressed = false;
 
 function printOutput(text){
@@ -153,6 +112,56 @@ cy.nodes().on('cxttapstart', function(event) {
     ipcRenderer.send('logger', 'here i will launch the modal');
 });
 
+socket.on('message', function() {
+    // message, sender, status, data[]
+    for (i = 3; i < arguments.length; i++) {
+        var registration = new xMsgRegistration(arguments[i]),
+            filtered_service = registration.name.match(REGEX);
+        if (filtered_service) {
+            if (!services_set.has(filtered_service[0])) {
+                var div = document.getElementById('terminal'),
+                    control = document.createElement('div'),
+                    span = document.createElement('span'),
+                    button = document.createElement('button');
+                control.setAttribute('class', 'demo-controls')
+                button.setAttribute('class', 'demo-button-small');
+                button.setAttribute('id', filtered_service[0]);
+                button.setAttribute('type', 'button');
+                button.appendChild(document.createTextNode(filtered_service[0]));
+                button.addEventListener('click', function() {
+                  if (!nodes.has(this.id)) {
+                    cy.add({
+                      group: 'nodes',
+                      data: {
+                        id: this.id,
+                        classpath: this.dataset.class
+                      },
+                      position: {
+                        x: 200,
+                        y: 200
+                      }});
+                      nodes[this.id] = this.id;
+                    }
+                  });
+                control.appendChild(button);
+                control.appendChild(span);
+                div.appendChild(control);
+                services_set.add(filtered_service[0]);
+            }
+        }
+    }
+});
+
+socket.connect(require('./utils.js').getLocalRegistrarAddress);
+
+setInterval(function() {
+    socket.send(ALL_SERVICES_MSG);
+}, 5000);
+
+setTimeout(function() {
+    socket.unref();
+}, 1000);
+
 document.addEventListener('keydown', function(event) {
     var node = cy.$(':selected');
     if (!node.id()) return;
@@ -174,36 +183,36 @@ document.addEventListener('keydown', function(event) {
 
 // We should load the available services for deployment, we will do this by
 // reading a YAML file with the list of available services.
-var availableServices;
-let nodes = new Set();
-
-try {
-    availableServices = yaml.safeLoad(fs.readFileSync('./assets/services.yml', 'utf8')).services;
-    for (var i = 0; i < availableServices.length; i++) {
-        var ul = document.getElementById('node-list'),
-            li = document.createElement('li');
-        li.appendChild(document.createTextNode(availableServices[i].name));
-        li.setAttribute("id", availableServices[i].name);
-        li.setAttribute("data-classpath", availableServices[i].class)
-        li.addEventListener('click', function() {
-            if (!nodes.has(this.id)) {
-                cy.add({
-                    group: "nodes",
-                    data: {
-                        id: this.id,
-                        classpath: this.dataset.class
-                    },
-                    position: {
-                        x: 200,
-                        y: 200
-                    }
-                });
-                nodes[this.id] = this.id;
-            }
-        });
-        ul.appendChild(li);
-    }
-
-} catch (e) {
-    ipcRenderer.send('logger', e);
-}
+// var availableServices;
+// let nodes = new Set();
+//
+// try {
+//     availableServices = yaml.safeLoad(fs.readFileSync('./assets/services.yml', 'utf8')).services;
+//     for (var i = 0; i < availableServices.length; i++) {
+//         var ul = document.getElementById('node-list'),
+//             li = document.createElement('li');
+//         li.appendChild(document.createTextNode(availableServices[i].name));
+//         li.setAttribute("id", availableServices[i].name);
+//         li.setAttribute("data-classpath", availableServices[i].class)
+//         li.addEventListener('click', function() {
+//             if (!nodes.has(this.id)) {
+//                 cy.add({
+//                     group: "nodes",
+//                     data: {
+//                         id: this.id,
+//                         classpath: this.dataset.class
+//                     },
+//                     position: {
+//                         x: 200,
+//                         y: 200
+//                     }
+//                 });
+//                 nodes[this.id] = this.id;
+//             }
+//         });
+//         ul.appendChild(li);
+//     }
+//
+// } catch (e) {
+//     ipcRenderer.send('logger', e);
+// }
