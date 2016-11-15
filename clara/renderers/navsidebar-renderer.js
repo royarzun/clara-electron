@@ -45,7 +45,7 @@ function __isProbable(serviceToCheck) {
     return false;
 }
 
-socket.connect(require('./utils.js').getLocalRegistrarAddress());
+socket.connect(require('./utils.js').getLocalRegistrarAddress);
 
 setInterval(function() {
     socket.send(ALL_SERVICES_MSG);
