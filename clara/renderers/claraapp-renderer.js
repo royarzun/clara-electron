@@ -9,6 +9,7 @@ var yaml = require('js-yaml'),
     fs = require('fs'),
     cytoscape = require('cytoscape'),
     cydagre = require('cytoscape-dagre'),
+    cyhandle = require('cytoscape-edgehandles'),
     dagre = require('dagre'),
     services_set = new Set();
 
@@ -18,6 +19,8 @@ require('../../assets/js/demo-btns.js').addListeners();
 
 
 cydagre(cytoscape, dagre); // register extension
+cyhandle(cytoscape);
+
 
 var cy = cytoscape({
     container: document.getElementById('cy'),
@@ -64,41 +67,56 @@ var cy = cytoscape({
         edges: []
     },
 });
-var lastSelection;
+
+// the default values of each option are outlined below:
+var defaults = {
+  preview: true, // whether to show added edges preview before releasing selection
+  stackOrder: 4, // Controls stack order of edgehandles canvas element by setting it's z-index
+  handleSize: 10, // the size of the edge handle put on nodes
+  handleColor: '#ff0000', // the colour of the handle and the line drawn from it
+  handleLineType: 'ghost', // can be 'ghost' for real edge, 'straight' for a straight line, or 'draw' for a draw-as-you-go line
+  handleLineWidth: 1, // width of handle line in pixels
+  handleIcon: false, // Pass an Image-object to use as icon on handle. Icons are resized according to zoom and centered in handle.
+  handleNodes: 'node', // selector/filter function for whether edges can be made from a given node
+  hoverDelay: 150, // time spend over a target node before it is considered a target selection
+  cxt: false, // whether cxt events trigger edgehandles (useful on touch)
+  enabled: true, // whether to start the extension in the enabled state
+  toggleOffOnLeave: false, // whether an edge is cancelled by leaving a node (true), or whether you need to go over again to cancel (false; allows multiple edges in one pass)
+  edgeType: function( sourceNode, targetNode ) {
+    // can return 'flat' for flat edges between nodes or 'node' for intermediate node between them
+    // returning null/undefined means an edge can't be added between the two nodes
+    return 'flat';
+  },
+  loopAllowed: function( node ) {
+    // for the specified node, return whether edges from itself to itself are allowed
+    return false;
+  },
+  nodeLoopOffset: -50, // offset for edgeType: 'node' loops
+  nodeParams: function( sourceNode, targetNode ) {
+    // for edges between the specified source and target
+    // return element object to be passed to cy.add() for intermediary node
+    return {};
+  },
+  edgeParams: function( sourceNode, targetNode, i ) {
+    // for edges between the specified source and target
+    // return element object to be passed to cy.add() for edge
+    // NB: i indicates edge index in case of edgeType: 'node'
+    return {};
+  },
+  start: function( sourceNode ) {
+    // fired when edgehandles interaction starts (drag on handle)
+  },
+  complete: function( sourceNode, targetNodes, addedEntities ) {
+    // fired when edgehandles is done and entities are added
+  },
+  stop: function( sourceNode ) {
+    // fired when edgehandles interaction is stopped (either complete with added edges or incomplete)
+  }
+};
+
+cy.edgehandles( defaults );
+
 let nodes = new Set();
-var ctrlPressed = false;
-
-cy.nodes().on('click', function(event) {
-    if (ctrlPressed) {
-      // if one node is selected we will connect to the next one clicked
-      // try to connect
-      ipcRenderer.send('logger', 'adding edge...(' + lastSelection + ', ' + this.id() + ')');
-
-      if (lastSelection == this.id() ){
-        ctrlPressed = false;
-        lastSelection = this.id();
-        return;
-      }
-      cy.add({
-        group: 'edges',
-        data: {
-          source: lastSelection,
-          target: this.id()
-        }
-      });
-      ctrlPressed = false;
-      lastSelection = this.id();
-    } else {
-      this.select();
-      ctrlPressed = false;
-      lastSelection = this.id();
-    }
-
-});
-
-cy.nodes().on('cxttapstart', function(event) {
-    ipcRenderer.send('logger', 'here i will launch the modal');
-});
 
 socket.on('message', function() {
     // message, sender, status, data[]
@@ -159,47 +177,7 @@ document.addEventListener('keydown', function(event) {
         ipcRenderer.send('logger', 'deleting: ' + node.id());
         node.remove();
         break;
-      case "c":
-        ipcRenderer.send('logger', 'ready to connect: ' + node.id());
-        ctrlPressed = true
-        break;
       default:
         break;
     }
 });
-
-// We should load the available services for deployment, we will do this by
-// reading a YAML file with the list of available services.
-// var availableServices;
-// let nodes = new Set();
-//
-// try {
-//     availableServices = yaml.safeLoad(fs.readFileSync('./assets/services.yml', 'utf8')).services;
-//     for (var i = 0; i < availableServices.length; i++) {
-//         var ul = document.getElementById('node-list'),
-//             li = document.createElement('li');
-//         li.appendChild(document.createTextNode(availableServices[i].name));
-//         li.setAttribute("id", availableServices[i].name);
-//         li.setAttribute("data-classpath", availableServices[i].class)
-//         li.addEventListener('click', function() {
-//             if (!nodes.has(this.id)) {
-//                 cy.add({
-//                     group: "nodes",
-//                     data: {
-//                         id: this.id,
-//                         classpath: this.dataset.class
-//                     },
-//                     position: {
-//                         x: 200,
-//                         y: 200
-//                     }
-//                 });
-//                 nodes[this.id] = this.id;
-//             }
-//         });
-//         ul.appendChild(li);
-//     }
-//
-// } catch (e) {
-//     ipcRenderer.send('logger', e);
-// }
