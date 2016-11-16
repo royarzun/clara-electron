@@ -23,7 +23,7 @@ cyhandle(cytoscape);
 
 
 var cy = cytoscape({
-    container: document.getElementById('cy'),
+    container: document.getElementById('container'),
     panningEnabled: false,
     zoomingEnabled: false,
     layout: {
