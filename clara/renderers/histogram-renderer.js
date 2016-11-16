@@ -21,10 +21,8 @@ ipcRenderer.on('histogram-format', (event, description, title) => {
         histosFormat = require('../histogram-format/naiads.js');
     }
     utils.createNodes(title, histosFormat.dataObjects, function() {
-        subscriberProcess = cp.fork('./clara/processes/subscriber-process.js', [title, histosFormat.dataType]);
-        messagePusher = setInterval(function() {
-            subscriberProcess.send('feed')
-        }, 5000);
+        subscriberProcess = cp.fork('./clara/processes/subscriber-process.js',
+                                    [title, histosFormat.dataType]);
 
         subscriberProcess.on('message', function(args) {
             histosFormat.draw(args);
